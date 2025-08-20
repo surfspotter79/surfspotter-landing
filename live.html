@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -31,21 +31,17 @@ world." />
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-8YBC63GN6D"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-      gtag("config", "G-8YBC63GN6D");
+      function gtag(){ dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-8YBC63GN6D');
     </script>
 
-    <!-- Styles -->
+    <!-- Optional: only keep this if you actually have /public/style.css -->
     <link rel="stylesheet" href="/style.css" />
   </head>
   <body>
     <div id="root"></div>
-
-    <!-- Main React Entry -->
+    <!-- Vite will transform this to fingerprinted assets on build -->
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-

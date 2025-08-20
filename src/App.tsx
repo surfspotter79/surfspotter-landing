@@ -1,50 +1,58 @@
-import { Routes, Route, Link, Navigate } from "react-router-dom";
+// src/App.tsx
+import React from "react";
+import { HashRouter, Routes, Route, Link } from "react-router-dom";
 
 function Home() {
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "grid",
-        placeItems: "center",
-        background: "linear-gradient(135deg, #ff6a00 0%, #ee0979 100%)",
-        color: "white",
-        fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif",
-        padding: "24px",
-      }}
-    >
-      <div style={{ textAlign: "center", maxWidth: 760 }}>
-        <h1 style={{ fontSize: 48, margin: 0 }}>Surfspotter</h1>
-        <p style={{ opacity: 0.9, margin: "12px 0 24px" }}>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-400 to-pink-500 text-white">
+      <div className="text-center max-w-2xl px-4">
+        <h1 className="text-6xl font-bold mb-4">Surfspotter</h1>
+        <p className="opacity-90 mb-8">
           Orange gradient demo app — if you can read this, routing works 🎉
         </p>
-        <nav style={{ display: "flex", gap: 12, justifyContent: "center" }}>
-          <Link to="/" style={linkStyle}>Home</Link>
-          <Link to="/photographers" style={linkStyle}>Photographers</Link>
-          <Link to="/schools" style={linkStyle}>Schools</Link>
-          <Link to="/surfers" style={linkStyle}>Surfers</Link>
+        <nav className="flex gap-3 justify-center flex-wrap">
+          <Link className="rounded-lg bg-white/20 px-4 py-2 backdrop-blur" to="/">Home</Link>
+          <Link className="rounded-lg bg-white/20 px-4 py-2 backdrop-blur" to="/photographers">Photographers</Link>
+          <Link className="rounded-lg bg-white/20 px-4 py-2 backdrop-blur" to="/schools">Schools</Link>
+          <Link className="rounded-lg bg-white/20 px-4 py-2 backdrop-blur" to="/surfers">Surfers</Link>
+          <Link className="rounded-lg bg-white/20 px-4 py-2 backdrop-blur" to="/signup">Sign up</Link>
         </nav>
       </div>
     </div>
   );
 }
 
-const linkStyle: React.CSSProperties = {
-  padding: "8px 12px",
-  borderRadius: 8,
-  background: "rgba(255,255,255,.15)",
-  color: "white",
-  textDecoration: "none",
-  backdropFilter: "blur(6px)",
-};
-
-function Placeholder({ title }: { title: string }) {
+function Directory({ title }: { title: string }) {
   return (
-    <div style={{ minHeight: "100vh", display: "grid", placeItems: "center" }}>
-      <div style={{ textAlign: "center" }}>
-        <h2>{title}</h2>
-        <p>Replace this route with your real page.</p>
-        <p><Link to="/" style={{ textDecoration: "underline" }}>← Back home</Link></p>
+    <div className="min-h-screen p-10 bg-gradient-to-br from-orange-400 to-pink-500 text-white">
+      <h2 className="text-4xl font-semibold mb-6">{title}</h2>
+      <p className="opacity-90 mb-6">Directory page placeholder.</p>
+      <Link className="underline" to="/">← Back home</Link>
+    </div>
+  );
+}
+
+function Signup() {
+  return (
+    <div className="min-h-screen p-10 bg-gradient-to-br from-orange-400 to-pink-500 text-white">
+      <h2 className="text-4xl font-semibold mb-6">Create your account</h2>
+      <form className="grid gap-4 max-w-md">
+        <input className="px-3 py-2 rounded text-black" placeholder="Email" />
+        <input className="px-3 py-2 rounded text-black" placeholder="Name" />
+        <select className="px-3 py-2 rounded text-black" defaultValue="">
+          <option value="" disabled>Select role…</option>
+          <option>Surfer</option>
+          <option>Pro Surfer</option>
+          <option>Amateur Photographer</option>
+          <option>Pro Photographer</option>
+          <option>Surf School</option>
+        </select>
+        <button type="button" className="px-4 py-2 bg-white text-black rounded">
+          Continue
+        </button>
+      </form>
+      <div className="mt-8">
+        <Link className="underline" to="/">← Back home</Link>
       </div>
     </div>
   );
@@ -52,14 +60,14 @@ function Placeholder({ title }: { title: string }) {
 
 export default function App() {
   return (
-    <Routes>
-      {/* IMPORTANT: keep root at "/" (basename handles /live in prod) */}
-      <Route path="/" element={<Home />} />
-      <Route path="/photographers" element={<Placeholder title="Photographers" />} />
-      <Route path="/schools" element={<Placeholder title="Schools" />} />
-      <Route path="/surfers" element={<Placeholder title="Surfers" />} />
-      {/* Fallback */}
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <HashRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/photographers" element={<Directory title="Photographers" />} />
+        <Route path="/schools" element={<Directory title="Surf Schools" />} />
+        <Route path="/surfers" element={<Directory title="Surfers" />} />
+        <Route path="/signup" element={<Signup />} />
+      </Routes>
+    </HashRouter>
   );
 }
