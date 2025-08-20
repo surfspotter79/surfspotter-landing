@@ -1,6 +1,6 @@
 {
   "rewrites": [
-    { "source": "/", "destination": "/maintenance.html" },
+    { "source": "/", "destination": "/index.html" },
     { "source": "/live", "destination": "/live.html" }
   ]
 }
