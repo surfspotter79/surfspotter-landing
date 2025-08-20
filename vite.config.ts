@@ -1,17 +1,15 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { resolve } from "path";
 
 export default defineConfig({
   plugins: [react()],
-  base: '/',
   build: {
-    outDir: 'dist',
-    emptyOutDir: true,
     rollupOptions: {
       input: {
-        main: 'index.html', // maintenance at /
-        live: 'live.html',  // orange app at /live
+        index: resolve(__dirname, "index.html"),
+        live: resolve(__dirname, "live.html"),
       },
     },
   },
-})
+});
