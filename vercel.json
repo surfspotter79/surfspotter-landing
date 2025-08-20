@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "/maintenance.html" },
+    { "source": "/live", "destination": "/index.html" }
+  ]
+}
