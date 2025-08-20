@@ -1,10 +1,114 @@
-<style>
-  .ss-menu-wrap{position:fixed;top:12px;right:16px;z-index:9999;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
-  .ss-menu-btn{display:flex;align-items:center;gap:.5rem;background:#fff;border:1px solid rgba(0,0,0,.08);box-shadow:0 6px 24px rgba(0,0,0,.08);border-radius:999px;padding:.5rem .85rem;cursor:pointer}
-  .ss-menu-btn svg{width:20px;height:20px}
-  .ss-menu{position:absolute;right:0;margin-top:.5rem;background:#fff;border:1px solid rgba(0,0,0,.08);box-shadow:0 12px 32px rgba(0,0,0,.14);border-radius:14px;min-width:240px;overflow:hidden;display:none}
-  .ss-menu.open{display:block}
-  .ss-menu a{display:flex;justify-content:space-between;align-items:center;padding:.8rem 1rem;color:#111;text-decoration:none}
-  .ss-menu a:hover{background:#f6f7f9}
-  .ss-chip{font-size:.72rem;background:#f1f5f9;border-radius:999px;padding:.15rem .5rem}
-</style>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+
+    <!-- SEO -->
+    <title>SurfSpotter – Epic Surf Photography Platform</title>
+    <meta
+      name="description"
+      content="Discover the world's most stunning surf photography from top spots. Upload, explore, and get inspired by wave-riding moments."
+    />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="SurfSpotter – Epic Surf Photography Platform" />
+    <meta property="og:description" content="Explore the best surf photography worldwide." />
+    <meta property="og:image" content="https://www.surfspotter.app/og-cover.jpg" />
+    <meta property="og:url" content="https://www.surfspotter.app" />
+    <meta property="og:type" content="website" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="SurfSpotter – Epic Surf Photography Platform" />
+    <meta name="twitter:description" content="Discover epic surf moments from around the world." />
+    <meta name="twitter:image" content="https://www.surfspotter.app/og-cover.jpg" />
+
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8YBC63GN6D"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){ dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-8YBC63GN6D");
+    </script>
+
+    <!-- Your landing stylesheet (keep your existing CSS) -->
+    <link rel="stylesheet" href="/style.css" />
+
+    <!-- Minimal styles for hamburger + slide-over -->
+    <style>
+      .ss-menu-wrap{position:fixed;top:12px;right:16px;z-index:9999;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+      .ss-menu-btn{display:flex;align-items:center;gap:.5rem;background:#fff;border:1px solid rgba(0,0,0,.08);box-shadow:0 6px 24px rgba(0,0,0,.08);border-radius:999px;padding:.5rem .85rem;cursor:pointer}
+      .ss-menu-btn svg{width:20px;height:20px}
+      .ss-menu{position:absolute;right:0;margin-top:.5rem;background:#fff;border:1px solid rgba(0,0,0,.08);box-shadow:0 12px 32px rgba(0,0,0,.14);border-radius:14px;min-width:260px;overflow:hidden;display:none}
+      .ss-menu.open{display:block}
+      .ss-menu a{display:flex;justify-content:space-between;align-items:center;padding:.85rem 1rem;color:#111;text-decoration:none}
+      .ss-menu a:hover{background:#f6f7f9}
+      .ss-chip{font-size:.72rem;background:#f1f5f9;border-radius:999px;padding:.15rem .5rem}
+      @media (prefers-color-scheme: dark){
+        .ss-menu-btn{background:#111;color:#fff;border-color:rgba(255,255,255,.06)}
+        .ss-menu-btn svg path{stroke:#fff}
+        .ss-menu{background:#0f0f0f;color:#fff;border-color:rgba(255,255,255,.08)}
+        .ss-menu a{color:#fff}
+        .ss-menu a:hover{background:rgba(255,255,255,.06)}
+        .ss-chip{background:#1f2937;color:#e5e7eb}
+      }
+    </style>
+  </head>
+  <body>
+    <!-- HAMBURGER -->
+    <div class="ss-menu-wrap" aria-label="SurfSpotter Menu">
+      <button class="ss-menu-btn" id="ssMenuBtn" aria-haspopup="true" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M3 6h18M3 12h18M3 18h18" stroke="#111" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span>Explore</span>
+      </button>
+      <nav class="ss-menu" id="ssMenu" role="menu">
+        <!-- Auth / demo -->
+        <a href="/live#/signup" role="menuitem">Sign Up <span class="ss-chip">new</span></a>
+        <a href="/live#/demos" role="menuitem">Demo Directory</a>
+
+        <hr style="border:none;border-top:1px solid rgba(0,0,0,.08)" />
+
+        <!-- Category deep-links (to /live app Explore page) -->
+        <a href="/live#/explore?cat=pro_photographer" role="menuitem">Pro Photographers</a>
+        <a href="/live#/explore?cat=pro_surfer" role="menuitem">Pro Surfers</a>
+        <a href="/live#/explore?cat=surf_school" role="menuitem">Surf Schools</a>
+        <a href="/live#/explore?cat=amateur_surfer" role="menuitem">Amateur Surfers</a>
+        <a href="/live#/explore?cat=amateur_photographer" role="menuitem">Amateur Photographers</a>
+        <a href="/live#/explore?cat=spots" role="menuitem">Spots</a>
+      </nav>
+    </div>
+
+    <!-- YOUR EXISTING LANDING CONTENT -->
+    <!-- Keep all your original hero/sections here. If you already have markup, leave it.
+         If you previously had just a root div, keep it and your CSS-driven landing. -->
+    <div id="landing-root">
+      <!-- ✨ Your existing landing markup goes here (hero, CTA, etc.). -->
+    </div>
+
+    <!-- Small script to toggle the menu -->
+    <script>
+      (function(){
+        const btn = document.getElementById('ssMenuBtn');
+        const menu = document.getElementById('ssMenu');
+        btn.addEventListener('click', () => {
+          const open = menu.classList.toggle('open');
+          btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+        document.addEventListener('click', (e) => {
+          if (!menu.contains(e.target) && !btn.contains(e.target)) {
+            menu.classList.remove('open');
+            btn.setAttribute('aria-expanded', 'false');
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>
