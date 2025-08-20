@@ -1,22 +1,16 @@
 // src/App.tsx
 import { Routes, Route, Navigate } from "react-router-dom";
 import ExplorePage from "./pages/Explore";
-// If you already have these pages, keep them; otherwise they are optional routes.
-// import SignUp from "./pages/SignUp";
-// import Dashboard from "./pages/Dashboard";
+import Signup from "./pages/Signup";
+import PhotoDetail from "./pages/PhotoDetail";
 
 export default function App() {
   return (
     <Routes>
-      {/* default inside /live → explore */}
       <Route path="/" element={<Navigate to="/explore" replace />} />
       <Route path="/explore" element={<ExplorePage />} />
-
-      {/* keep your existing routes if present */}
-      {/* <Route path="/signup" element={<SignUp />} /> */}
-      {/* <Route path="/dashboard/:id" element={<Dashboard />} /> */}
-
-      {/* fallback */}
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/photo/:id" element={<PhotoDetail />} />
       <Route path="*" element={<Navigate to="/explore" replace />} />
     </Routes>
   );

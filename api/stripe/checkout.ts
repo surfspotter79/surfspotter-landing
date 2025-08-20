@@ -1,48 +1,43 @@
-import { stripe } from '../lib/stripe.js';
-import { getPhoto, getPhotographer } from '../lib/data.js';
+// api/stripe/checkout.ts
+import type { VercelRequest, VercelResponse } from "@vercel/node";
+import Stripe from "stripe";
 
-const PLATFORM_FEE_BPS = 1500; // 15%
-const DEFAULT_CURRENCY = (process.env.CURRENCY || 'CHF').toLowerCase();
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
+  apiVersion: "2024-12-18.acacia", // or your pinned version
+});
 
-export default async function handler(req: any, res: any) {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  if (req.method !== "POST") {
+    res.status(405).json({ error: "Method not allowed" });
+    return;
+  }
   try {
-    if (req.method !== 'POST') return res.status(405).send('Method Not Allowed');
-
-    const { photoId, quantity = 1 } = req.body || {};
-    const photo = getPhoto(photoId);
-    if (!photo) return res.status(404).json({ error: 'Photo not found' });
-
-    const photographer = getPhotographer(photo.photographerId);
-    if (!photographer?.stripeAccountId) {
-      return res.status(400).json({ error: 'Photographer not onboarded' });
+    const { items, currency = "eur", successUrl, cancelUrl, customer_email } = req.body || {};
+    if (!Array.isArray(items) || items.length === 0) {
+      res.status(400).json({ error: "No items provided" });
+      return;
     }
-
-    const unitAmount = Math.round(Number(photo.priceCHF) * 100);
-    const application_fee_amount = Math.floor((unitAmount * PLATFORM_FEE_BPS) / 10000);
+    const line_items = items.map((it: any) => ({
+      price_data: {
+        currency,
+        unit_amount: it.amount, // cents (demo only; validate in real app)
+        product_data: { name: it.name, metadata: it.metadata || {} },
+      },
+      quantity: it.quantity || 1,
+    }));
 
     const session = await stripe.checkout.sessions.create({
-      mode: 'payment',
-      currency: DEFAULT_CURRENCY,
-      line_items: [{
-        price_data: {
-          currency: DEFAULT_CURRENCY,
-          product_data: { name: photo.title },
-          unit_amount: unitAmount,
-        },
-        quantity,
-      }],
-      payment_intent_data: {
-        application_fee_amount,
-        transfer_data: { destination: photographer.stripeAccountId },
-      },
-      success_url: `${process.env.SITE_URL}/purchase/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.SITE_URL}/purchase/cancelled`,
-      metadata: { photoId: photo.id, photographerId: photographer.id },
+      mode: "payment",
+      line_items,
+      allow_promotion_codes: true,
+      success_url: successUrl || `${req.headers.origin || ""}/live#/thankyou`,
+      cancel_url: cancelUrl || `${req.headers.origin || ""}/live#/explore`,
+      customer_email,
     });
 
-    return res.status(200).json({ id: session.id, url: session.url });
+    res.status(200).json({ id: session.id, url: session.url });
   } catch (err: any) {
-    console.error('checkout error:', err);
-    return res.status(500).json({ error: err?.message || 'Unknown error' });
+    console.error(err);
+    res.status(500).json({ error: err?.message || "Stripe error" });
   }
 }
