@@ -1,6 +1,3 @@
-mkdir -p src/pages
-
-cat > src/pages/Directory.tsx <<'TSX'
 import type { User } from "../types";
 
 export default function Directory({ title, users }: { title: string; users: User[] }) {
