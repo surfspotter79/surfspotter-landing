@@ -1,10 +1,1 @@
-{
-  "rewrites": [
-    { "source": "/", "destination": "/maintenance.html" },
-<<<<<<< HEAD
-    { "source": "/live", "destination": "/index.html" }
-=======
-    { "source": "/live", "destination": "/live.html" }
->>>>>>> staging
-  ]
-}
+{"rewrites":[{"source":"/","destination":"/maintenance.html"},{"source":"/live","destination":"/index.html"}]}
