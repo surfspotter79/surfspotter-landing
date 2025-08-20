@@ -1,15 +1,17 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
 
     <!-- SEO -->
     <title>SurfSpotter – Epic Surf Photography Platform</title>
     <meta
       name="description"
-      content="Discover the world's most stunning surf photography from top spots. Upload, 
-explore, and get inspired by wave-riding moments."
+      content="Discover the world's most stunning surf photography from top spots. Upload, explore, and get inspired by wave-riding moments."
     />
     <meta name="robots" content="index, follow" />
 
@@ -23,29 +25,193 @@ explore, and get inspired by wave-riding moments."
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="SurfSpotter – Epic Surf Photography Platform" />
-    <meta name="twitter:description" content="Discover epic surf moments from around the 
-world." />
+    <meta name="twitter:description" content="Discover epic surf moments from around the world." />
     <meta name="twitter:image" content="https://www.surfspotter.app/og-cover.jpg" />
 
     <!-- Google Analytics 4 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-8YBC63GN6D"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
+      function gtag(){ dataLayer.push(arguments); }
       gtag("js", new Date());
       gtag("config", "G-8YBC63GN6D");
     </script>
 
-    <!-- Styles -->
+    <!-- Optional: keep only if you actually have /public/style.css; not required for the hero below -->
     <link rel="stylesheet" href="/style.css" />
+
+    <!-- Minimal landing styles (orange gradient hero + buttons + hamburger) -->
+    <style>
+      :root {
+        --fg: #0b0b0c;
+        --bg: #fff;
+        --glass: rgba(255,255,255,.12);
+      }
+      @media (prefers-color-scheme: dark){
+        :root { --fg:#fff; --bg:#0b0b0c; --glass: rgba(255,255,255,.1); }
+      }
+      * { box-sizing: border-box; }
+      html, body { height: 100%; }
+      body {
+        margin: 0;
+        font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+        color: var(--fg);
+        background: var(--bg);
+      }
+
+      /* HAMBURGER (your existing styles, slightly refined) */
+      .ss-menu-wrap{position:fixed;top:12px;right:16px;z-index:9999}
+      .ss-menu-btn{display:flex;align-items:center;gap:.5rem;background:#fff;border:1px solid rgba(0,0,0,.08);box-shadow:0 6px 24px rgba(0,0,0,.08);border-radius:999px;padding:.5rem .85rem;cursor:pointer}
+      .ss-menu-btn svg{width:20px;height:20px}
+      .ss-menu{position:absolute;right:0;margin-top:.5rem;background:#fff;border:1px solid rgba(0,0,0,.08);box-shadow:0 12px 32px rgba(0,0,0,.14);border-radius:14px;min-width:260px;overflow:hidden;display:none}
+      .ss-menu.open{display:block}
+      .ss-menu a{display:flex;justify-content:space-between;align-items:center;padding:.85rem 1rem;color:#111;text-decoration:none}
+      .ss-menu a:hover{background:#f6f7f9}
+      .ss-chip{font-size:.72rem;background:#f1f5f9;border-radius:999px;padding:.15rem .5rem}
+      @media (prefers-color-scheme: dark){
+        .ss-menu-btn{background:#111;color:#fff;border-color:rgba(255,255,255,.06)}
+        .ss-menu-btn svg path{stroke:#fff}
+        .ss-menu{background:#0f0f0f;color:#fff;border-color:rgba(255,255,255,.08)}
+        .ss-menu a{color:#fff}
+        .ss-menu a:hover{background:rgba(255,255,255,.06)}
+        .ss-chip{background:#1f2937;color:#e5e7eb}
+      }
+
+      /* HERO */
+      .hero {
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, #ff7a18, #ffb347 35%, #ffd194);
+        position: relative;
+        overflow: hidden;
+      }
+      .hero::after {
+        content:"";
+        position:absolute; inset:0;
+        background: radial-gradient(60% 60% at 75% 15%, rgba(255,255,255,.35), transparent 60%),
+                    radial-gradient(40% 40% at 10% 80%, rgba(255,255,255,.25), transparent 60%);
+        pointer-events:none;
+      }
+      .hero-inner {
+        width: min(1100px, 92vw);
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        color: #111;
+      }
+      .brand {
+        display:inline-flex; align-items:center; gap:.6rem;
+        padding:.45rem .7rem; border-radius:999px;
+        background: rgba(255,255,255,.65);
+        border: 1px solid rgba(0,0,0,.08);
+        box-shadow: 0 8px 24px rgba(0,0,0,.08);
+        margin-bottom: 14px;
+        font-weight: 600;
+      }
+      .hero h1 {
+        font-size: clamp(2.2rem, 4.8vw, 4rem);
+        line-height: 1.05;
+        margin: 10px 0 12px;
+      }
+      .hero p.lede {
+        font-size: clamp(1rem, 2vw, 1.2rem);
+        opacity: .9;
+        margin: 0 auto 22px;
+        max-width: 72ch;
+      }
+      .cta {
+        display:flex; gap:12px; align-items:center; justify-content:center;
+        flex-wrap: wrap;
+      }
+      .btn {
+        appearance: none;
+        border: 1px solid rgba(0,0,0,.12);
+        background: #fff;
+        color: #111;
+        padding: .8rem 1.2rem;
+        border-radius: 999px;
+        font-weight: 600;
+        text-decoration: none;
+        box-shadow: 0 8px 24px rgba(0,0,0,.08);
+      }
+      .btn.primary {
+        background: #111;
+        color: #fff;
+        border-color: #111;
+      }
+      .subnote {
+        margin-top: 12px;
+        opacity: .8;
+        font-size: .92rem;
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <!-- HAMBURGER -->
+    <div class="ss-menu-wrap" aria-label="SurfSpotter Menu">
+      <button class="ss-menu-btn" id="ssMenuBtn" aria-haspopup="true" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M3 6h18M3 12h18M3 18h18" stroke="#111" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span>Explore</span>
+      </button>
+      <nav class="ss-menu" id="ssMenu" role="menu">
+        <a href="/live#/signup" role="menuitem">Sign Up <span class="ss-chip">new</span></a>
+        <a href="/live#/demos" role="menuitem">Demo Directory</a>
+        <hr style="border:none;border-top:1px solid rgba(0,0,0,.08)" />
+        <a href="/live#/explore?cat=pro_photographer" role="menuitem">Pro Photographers</a>
+        <a href="/live#/explore?cat=pro_surfer" role="menuitem">Pro Surfers</a>
+        <a href="/live#/explore?cat=surf_school" role="menuitem">Surf Schools</a>
+        <a href="/live#/explore?cat=amateur_surfer" role="menuitem">Amateur Surfers</a>
+        <a href="/live#/explore?cat=amateur_photographer" role="menuitem">Amateur Photographers</a>
+        <a href="/live#/explore?cat=spots" role="menuitem">Spots</a>
+      </nav>
+    </div>
 
-    <!-- Main React Entry -->
-    <script type="module" src="/src/main.tsx"></script>
+    <!-- ORIGINAL LANDING (static) -->
+    <section class="hero">
+      <div class="hero-inner">
+        <span class="brand">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 12c5-6 11-6 16 0" stroke="#111" stroke-width="2" stroke-linecap="round"/>
+            <path d="M4 12c5 6 11 6 16 0" stroke="#111" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="12" cy="12" r="2" fill="#111"/>
+          </svg>
+          SurfSpotter
+        </span>
+
+        <h1>Epic surf photography from the world’s best spots</h1>
+        <p class="lede">
+          Browse iconic waves, discover rising talent, and build collections you love.
+          Join as a surfer, photographer, or school—share your moments and grow your portfolio.
+        </p>
+
+        <div class="cta">
+          <a class="btn primary" href="/live#/explore?cat=spots">Explore Photos</a>
+          <a class="btn" href="/live#/signup">Create an Account</a>
+        </div>
+
+        <div class="subnote">Prefer the app view? Go to <a href="/live" style="color:inherit"><u>/live</u></a>.</div>
+      </div>
+    </section>
+
+    <!-- Menu toggle script -->
+    <script>
+      (function(){
+        const btn = document.getElementById('ssMenuBtn');
+        const menu = document.getElementById('ssMenu');
+        btn.addEventListener('click', () => {
+          const open = menu.classList.toggle('open');
+          btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+        document.addEventListener('click', (e) => {
+          if (!menu.contains(e.target) && !btn.contains(e.target)) {
+            menu.classList.remove('open'); btn.setAttribute('aria-expanded','false');
+          }
+        });
+      })();
+    </script>
   </body>
 </html>
-
