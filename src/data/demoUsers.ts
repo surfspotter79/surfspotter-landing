@@ -88,3 +88,39 @@ export const demoUsers: DemoUser[] = [
 ];
 
 export const DEMO_PASSWORD_HINT = "demo1234";
+
+// --- DEMO persistence helpers (localStorage) ---
+
+const LS_KEY = "surfspotter.demo.users";
+
+// Ensure demo users exist once in localStorage.
+// Returns the current list.
+export function seedDemosIfEmpty(): DemoUser[] {
+  const raw = localStorage.getItem(LS_KEY);
+  if (!raw) {
+    localStorage.setItem(LS_KEY, JSON.stringify(demoUsers));
+    return demoUsers;
+  }
+  try {
+    return JSON.parse(raw) as DemoUser[];
+  } catch {
+    localStorage.setItem(LS_KEY, JSON.stringify(demoUsers));
+    return demoUsers;
+  }
+}
+
+// Get users (seed if needed).
+export function loadUsers(): DemoUser[] {
+  const raw = localStorage.getItem(LS_KEY);
+  if (!raw) return seedDemosIfEmpty();
+  try {
+    return JSON.parse(raw) as DemoUser[];
+  } catch {
+    return seedDemosIfEmpty();
+  }
+}
+
+// Save users after edits (albums/stacks, etc.)
+export function saveUsers(users: DemoUser[]) {
+  localStorage.setItem(LS_KEY, JSON.stringify(users));
+}
