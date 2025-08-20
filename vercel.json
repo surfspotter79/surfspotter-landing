@@ -1,5 +1,6 @@
 {
   "rewrites": [
-    { "source": "/live", "destination": "/live.html" }
+    { "source": "/live", "destination": "/live.html" },
+    { "source": "/live/(.*)", "destination": "/live.html" }
   ]
 }
