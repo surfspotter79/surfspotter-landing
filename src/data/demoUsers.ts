@@ -1,100 +1,95 @@
-// src/data/demoUsers.ts
-export type Role =
-  | "pro-photographer"
-  | "pro-surfer"
-  | "surf-school"
-  | "amateur-photographer"
-  | "amateur-surfer"
-  | "user";
+import type { Album, DemoUser, Photo, Portfolio, Role, Stack } from "../types/users";
 
-export interface DemoUser {
-  id: string;
-  role: Role;
-  name: string;
-  email: string;
-  password: string; // DEMO ONLY
-  avatar: string;
-  portfolio: {
-    albums: { id: string; name: string; photoUrls: string[] }[];
-    stacks: { id: string; name: string; photoUrls: string[] }[];
-  };
-  cart: { id: string; photoUrl: string; price: number }[];
-  orders: { id: string; total: number; items: number; createdAt: string }[];
+// ---- Stable surfing images (Unsplash) ----
+const PHOTOS: string[] = [
+  "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1600&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?q=80&w=1600&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1542181961-9590d0d71e1c?q=80&w=1600&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1478562853135-c3c9e3ef7905?q=80&w=1600&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1500375592092-26a5d45f08d3?q=80&w=1600&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1600&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=1600&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1600&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1600&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=1600&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1502082553048-f009c37129b9?q=80&w=1600&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=1600&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1437622368342-7a3d73a34c8f?q=80&w=1600&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1441716844725-09cedc13a4e7?q=80&w=1600&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1600&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1455218873509-8097305ee378?q=80&w=1600&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1460353581641-37baddab0fa2?q=80&w=1600&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1519690889869-f10631b2c3c7?q=80&w=1600&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1502082553048-f009c37129b9?q=80&w=1600&auto=format&fit=crop"
+];
+
+// ---- helpers ----
+const euro = (min = 9, max = 49) => Math.round((Math.random() * (max - min) + min) / 1) * 1;
+const pick = <T,>(a: T[], n: number) => a.slice(0, n);
+const uid = () => Math.random().toString(36).slice(2, 9);
+const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
+// Make photos with IDs + price
+function makePhotos(urls: string[]): Photo[] {
+  return urls.map((url, i) => ({
+    id: `ph_${uid()}_${i}`,
+    url,
+    title: "Surf Shot",
+    price: euro()
+  }));
 }
 
-const P = (x: TemplateStringsArray) => x[0]; // tiny template helper for multi-line urls
+function makePortfolio(photoUrls: string[], titleA = "Morning Session", titleB = "Evening Glass-Off"): Portfolio {
+  const half = Math.max(5, Math.min(10, Math.floor(photoUrls.length / 2)));
+  const albumA: Album = { id: `al_${uid()}`, title: titleA, photos: makePhotos(pick(photoUrls, half)) };
+  const albumB: Album = { id: `al_${uid()}`, title: titleB, photos: makePhotos(photoUrls.slice(half, Math.min(photoUrls.length, half * 2))) };
 
-const stock = [
-  "https://images.pexels.com/photos/390051/surfer-wave-sunrise-surfing-390051.jpeg?auto=compress&cs=tinysrgb&w=1200",
-  "https://images.pexels.com/photos/1654701/pexels-photo-1654701.jpeg?auto=compress&cs=tinysrgb&w=1200",
-  "https://images.pexels.com/photos/1654702/pexels-photo-1654702.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  const allPhotoIds = [...albumA.photos, ...albumB.photos].map(p => p.id);
+  const stack1: Stack = { id: `st_${uid()}`, title: "Best of", photoIds: pick(allPhotoIds, Math.min(6, allPhotoIds.length)) };
+  const stack2: Stack = { id: `st_${uid()}`, title: "Barrels", photoIds: pick(allPhotoIds.reverse(), Math.min(5, allPhotoIds.length)) };
+
+  return { albums: [albumA, albumB], stacks: [stack1, stack2] };
+}
+
+type SeedSpec = { role: Role; names: string[]; avatarStart: number; prefix: string };
+
+const SPECS: SeedSpec[] = [
+  { role: "pro_photographer", names: ["Alex Ramos","Mia Duarte","Jonah Blake","Sara Timmons","Leo Martins"], avatarStart: 10, prefix: "prophoto" },
+  { role: "surf_school",      names: ["WaveLab School","Aloha Surf Co","Blue Reef Academy","NorthPoint Surf","Sunrise Surf Camp"], avatarStart: 20, prefix: "school" },
+  { role: "pro_surfer",       names: ["Tia Keahi","Marco Gillem","Nina Sato","Duke Varela","Kai Hudson"], avatarStart: 30, prefix: "prosurfer" },
+  { role: "amateur_photographer", names: ["Clara N.","Ricky P.","Lena V.","Owen J.","Noa B."], avatarStart: 40, prefix: "amphoto" },
+  { role: "amateur_surfer",   names: ["Marty K.","Iris Q.","Sven L.","Paula D.","Kenji M."], avatarStart: 50, prefix: "amsurfer" },
+  { role: "basic_user",       names: ["Visitor A","Visitor B","Visitor C","Visitor D","Visitor E"], avatarStart: 60, prefix: "basic" }
 ];
 
-const AV = (n:number)=>`https://i.pravatar.cc/240?img=${n}`;
+// Build users programmatically (2 albums, ~10 photos each, 2 stacks)
+const demoUsers: DemoUser[] = SPECS.flatMap(spec =>
+  spec.names.map((name, idx) => {
+    const id = slug(`${spec.prefix}-${name}`);
+    const email = `demo+${spec.prefix}${idx + 1}@surfspotter.app`;
+    const avatarUrl = `https://i.pravatar.cc/200?img=${spec.avatarStart + idx}`;
+    // rotate the photo pool so each user gets different images
+    const offset = (idx * 3) % PHOTOS.length;
+    const urls = [...PHOTOS.slice(offset), ...PHOTOS.slice(0, offset)];
+    const portfolio = makePortfolio(pick(urls, 12));
+    return {
+      id,
+      name,
+      role: spec.role,
+      email,
+      password: "demo1234",
+      avatarUrl,
+      portfolio,
+      cart: [],
+      orders: []
+    } as DemoUser;
+  })
+);
 
-const make = (o: Partial<DemoUser> & Pick<DemoUser, "id"|"role"|"name"|"email"|"password">): DemoUser => ({
-  avatar: AV(Math.floor(Math.random()*70)+1),
-  portfolio: {
-    albums: [{ id: "a1", name: "Highlights", photoUrls: stock }],
-    stacks: [{ id: "s1", name: "Best of 2025", photoUrls: stock.slice().reverse() }],
-  },
-  cart: [],
-  orders: [],
-  ...o,
-}) as DemoUser;
-
-export const demoUsers: DemoUser[] = [
-  // Pro Photographers
-  make({ id:"u1", role:"pro-photographer", name:"Alex Morel",   email:"alex.morel@demo.surfspotter.app",   password:"demo1234" }),
-  make({ id:"u2", role:"pro-photographer", name:"Maya Tanaka",  email:"maya.tanaka@demo.surfspotter.app",  password:"demo1234" }),
-  make({ id:"u3", role:"pro-photographer", name:"Luca Ferreira",email:"luca.ferreira@demo.surfspotter.app",password:"demo1234" }),
-  make({ id:"u4", role:"pro-photographer", name:"Zanele Khoza", email:"zanele.khoza@demo.surfspotter.app", password:"demo1234" }),
-  make({ id:"u5", role:"pro-photographer", name:"Owen McCarthy",email:"owen.mccarthy@demo.surfspotter.app",password:"demo1234" }),
-
-  // Surf Schools
-  make({ id:"u6", role:"surf-school", name:"WaveRide Peniche", email:"school.peniche@demo.surfspotter.app", password:"demo1234" }),
-  make({ id:"u7", role:"surf-school", name:"Ericeira Surf Academy", email:"school.ericeira@demo.surfspotter.app", password:"demo1234" }),
-  make({ id:"u8", role:"surf-school", name:"Bali Reef School", email:"school.bali@demo.surfspotter.app", password:"demo1234" }),
-  make({ id:"u9", role:"surf-school", name:"Hossegor Surf Camp", email:"school.hossegor@demo.surfspotter.app", password:"demo1234" }),
-  make({ id:"u10", role:"surf-school", name:"Santa Cruz Surf Co.", email:"school.santacruz@demo.surfspotter.app", password:"demo1234" }),
-
-  // Pro Surfers
-  make({ id:"u11", role:"pro-surfer", name:"Kai Thompson", email:"kai.thompson@demo.surfspotter.app", password:"demo1234" }),
-  make({ id:"u12", role:"pro-surfer", name:"Ines Duarte",  email:"ines.duarte@demo.surfspotter.app",  password:"demo1234" }),
-  make({ id:"u13", role:"pro-surfer", name:"Mateo Silva",  email:"mateo.silva@demo.surfspotter.app",  password:"demo1234" }),
-  make({ id:"u14", role:"pro-surfer", name:"Nia Kaimana",  email:"nia.kaimana@demo.surfspotter.app",  password:"demo1234" }),
-  make({ id:"u15", role:"pro-surfer", name:"Tomi Hasegawa",email:"tomi.hasegawa@demo.surfspotter.app",password:"demo1234" }),
-
-  // Amateur Photographers
-  make({ id:"u16", role:"amateur-photographer", name:"Julie Martin", email:"julie.martin@demo.surfspotter.app", password:"demo1234" }),
-  make({ id:"u17", role:"amateur-photographer", name:"Benji Ortega", email:"benji.ortega@demo.surfspotter.app", password:"demo1234" }),
-  make({ id:"u18", role:"amateur-photographer", name:"Clara Rossi", email:"clara.rossi@demo.surfspotter.app", password:"demo1234" }),
-  make({ id:"u19", role:"amateur-photographer", name:"Hugo Costa", email:"hugo.costa@demo.surfspotter.app", password:"demo1234" }),
-  make({ id:"u20", role:"amateur-photographer", name:"Lina Park", email:"lina.park@demo.surfspotter.app", password:"demo1234" }),
-
-  // Amateur Surfers
-  make({ id:"u21", role:"amateur-surfer", name:"Max Leblanc", email:"max.leblanc@demo.surfspotter.app", password:"demo1234" }),
-  make({ id:"u22", role:"amateur-surfer", name:"Sofia Mendes", email:"sofia.mendes@demo.surfspotter.app", password:"demo1234" }),
-  make({ id:"u23", role:"amateur-surfer", name:"Theo Rossi",   email:"theo.rossi@demo.surfspotter.app",  password:"demo1234" }),
-  make({ id:"u24", role:"amateur-surfer", name:"Ava Nakamura", email:"ava.nakamura@demo.surfspotter.app",password:"demo1234" }),
-  make({ id:"u25", role:"amateur-surfer", name:"Leo Richter",  email:"leo.richter@demo.surfspotter.app", password:"demo1234" }),
-
-  // Basic Users
-  make({ id:"u26", role:"user", name:"Emily Chen",  email:"emily.chen@demo.surfspotter.app",  password:"demo1234" }),
-  make({ id:"u27", role:"user", name:"Daniel Novak",email:"daniel.novak@demo.surfspotter.app", password:"demo1234" }),
-  make({ id:"u28", role:"user", name:"Sara Lopez",  email:"sara.lopez@demo.surfspotter.app",   password:"demo1234" }),
-  make({ id:"u29", role:"user", name:"Paul Dubois", email:"paul.dubois@demo.surfspotter.app",  password:"demo1234" }),
-  make({ id:"u30", role:"user", name:"Omar Haddad", email:"omar.haddad@demo.surfspotter.app",  password:"demo1234" }),
-];
-
-export const DEMO_PASSWORD_HINT = "demo1234";
-
-// --- DEMO persistence helpers (localStorage) ---
-
+// ---- localStorage helpers ----
 const LS_KEY = "surfspotter.demo.users";
 
-// Ensure demo users exist once in localStorage.
-// Returns the current list.
 export function seedDemosIfEmpty(): DemoUser[] {
   const raw = localStorage.getItem(LS_KEY);
   if (!raw) {
@@ -109,18 +104,23 @@ export function seedDemosIfEmpty(): DemoUser[] {
   }
 }
 
-// Get users (seed if needed).
 export function loadUsers(): DemoUser[] {
   const raw = localStorage.getItem(LS_KEY);
   if (!raw) return seedDemosIfEmpty();
-  try {
-    return JSON.parse(raw) as DemoUser[];
-  } catch {
-    return seedDemosIfEmpty();
-  }
+  try { return JSON.parse(raw) as DemoUser[]; }
+  catch { return seedDemosIfEmpty(); }
 }
 
-// Save users after edits (albums/stacks, etc.)
 export function saveUsers(users: DemoUser[]) {
   localStorage.setItem(LS_KEY, JSON.stringify(users));
+}
+
+export function getUserById(id: string): DemoUser | undefined {
+  return loadUsers().find(u => u.id === id);
+}
+
+// Optional: clear & reseed (attach to window for quick debugging)
+declare global { interface Window { __seedSurfspotter?: () => void } }
+if (typeof window !== "undefined") {
+  window.__seedSurfspotter = () => { localStorage.removeItem(LS_KEY); seedDemosIfEmpty(); alert("Demo data reseeded."); };
 }

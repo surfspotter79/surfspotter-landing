@@ -1,82 +1,62 @@
-// src/pages/Directory.tsx
 import { useEffect, useMemo, useState } from "react";
-import type { Role, User } from "../types/users";
-import { seedDemosIfEmpty, loadUsers } from "../data/demoUsers";
+import { loadUsers, seedDemosIfEmpty } from "../data/demoUsers";
+import type { DemoUser, Role } from "../types/users";
+import { Link } from "react-router-dom";
 
-const TABS: Role[] = [
-  "pro-photographer",
-  "surf-school",
-  "pro-surfer",
-  "amateur-photographer",
-  "surfer",
+const ROLES: { key: Role; label: string }[] = [
+  { key: "pro_photographer", label: "Pro Photographers" },
+  { key: "surf_school", label: "Surf Schools" },
+  { key: "pro_surfer", label: "Pro Surfers" },
+  { key: "amateur_photographer", label: "Amateur Photographers" },
+  { key: "amateur_surfer", label: "Amateur Surfers" },
+  { key: "basic_user", label: "Basic Users" },
 ];
 
 export default function Directory() {
-  const [users, setUsers] = useState<User[]>([]);
-  const [tab, setTab] = useState<Role>("pro-photographer");
+  const [role, setRole] = useState<Role>("pro_photographer");
+  const [users, setUsers] = useState<DemoUser[]>([]);
 
   useEffect(() => {
-    setUsers(seedDemosIfEmpty());
+    // seed once
+    seedDemosIfEmpty();
+    setUsers(loadUsers());
   }, []);
 
-  const filtered = useMemo(
-    () => users.filter((u) => u.role === tab),
-    [users, tab]
-  );
+  const list = useMemo(() => users.filter(u => u.role === role), [users, role]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-400 to-rose-500 text-white">
-      <div className="mx-auto max-w-6xl px-6 py-16">
-        <h1 className="text-4xl font-extrabold mb-2">Demo Directory</h1>
-        <p className="opacity-90 mb-8">
-          5 users per role. These live only in your browser (localStorage) for now.
-        </p>
+    <div className="min-h-screen p-8 text-white" style={{ background: "linear-gradient(135deg,#ff6a3d,#ff3d77)" }}>
+      <h1 className="text-4xl font-semibold mb-6">Demo Accounts</h1>
+      <p className="opacity-80 mb-6">Click a user to open their dashboard. All demo passwords: <b>demo1234</b>.</p>
 
-        <div className="flex gap-2 mb-8">
-          {TABS.map((r) => (
-            <button
-              key={r}
-              onClick={() => setTab(r)}
-              className={
-                "px-3 py-2 rounded-md " +
-                (tab === r ? "bg-white/25" : "bg-white/10 hover:bg-white/20")
-              }
-            >
-              {r}
-            </button>
-          ))}
-        </div>
+      <div className="flex gap-2 flex-wrap mb-8">
+        {ROLES.map(r => (
+          <button
+            key={r.key}
+            onClick={() => setRole(r.key)}
+            className={`px-3 py-1 rounded-full ${role === r.key ? "bg-white text-black" : "bg-white/20 hover:bg-white/30"}`}
+          >
+            {r.label}
+          </button>
+        ))}
+      </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filtered.map((u) => (
-            <div key={u.id} className="bg-white/10 rounded-2xl p-5 backdrop-blur">
-              <div className="flex items-center gap-3 mb-3">
-                <img src={u.avatarUrl} alt="" className="w-10 h-10 rounded-full bg-white/50" />
-                <div>
-                  <div className="font-semibold">{u.name}</div>
-                  <div className="text-sm opacity-80">{u.role}</div>
-                </div>
+      <div className="grid gap-4 grid-cols-[repeat(auto-fill,minmax(260px,1fr))]">
+        {list.map(u => (
+          <div key={u.id} className="rounded-2xl bg-black/25 p-4 border border-white/10">
+            <div className="flex items-center gap-3 mb-3">
+              <img src={u.avatarUrl} alt={u.name} className="w-12 h-12 rounded-full object-cover" />
+              <div>
+                <div className="font-medium">{u.name}</div>
+                <div className="text-sm opacity-70">{u.email}</div>
               </div>
-              {u.stacks && u.stacks.length > 0 && (
-                <div className="mt-3">
-                  <div className="text-sm opacity-80 mb-2">Stacks</div>
-                  <div className="grid grid-cols-2 gap-2">
-                    {u.stacks.map((s) => (
-                      <div key={s.id} className="rounded-lg overflow-hidden">
-                        <img src={s.coverUrl} alt={s.title} className="w-full h-28 object-cover" />
-                        <div className="text-xs px-2 py-1 bg-black/40">{s.title}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
             </div>
-          ))}
-        </div>
-
-        {filtered.length === 0 && (
-          <div className="opacity-90">No users yet for this role.</div>
-        )}
+            <div className="text-sm opacity-80 mb-3">Albums: {u.portfolio.albums.length} • Stacks: {u.portfolio.stacks.length}</div>
+            <Link to={`/dashboard/${u.id}`} className="inline-block px-3 py-2 rounded-lg bg-white text-black text-sm font-medium">
+              Open Dashboard
+            </Link>
+          </div>
+        ))}
       </div>
     </div>
   );

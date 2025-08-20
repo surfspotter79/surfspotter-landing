@@ -1,25 +1,56 @@
-// src/types/users.ts
 export type Role =
-  | "pro-photographer"
-  | "amateur-photographer"
-  | "surf-school"
-  | "pro-surfer"
-  | "surfer";
+  | "pro_photographer"
+  | "surf_school"
+  | "pro_surfer"
+  | "amateur_photographer"
+  | "amateur_surfer"
+  | "basic_user";
 
-export type Photo = { id: string; url: string; title?: string };
+export interface Photo {
+  id: string;
+  url: string;
+  title?: string;
+  price?: number;      // EUR
+  keywords?: string[];
+}
 
-export type PhotoStack = {
+export interface Album {
   id: string;
   title: string;
-  coverUrl: string;
   photos: Photo[];
-};
+}
 
-export interface User {
+export interface Stack {
   id: string;
-  role: Role;
+  title: string;
+  photoIds: string[];  // references into albums
+}
+
+export interface Portfolio {
+  albums: Album[];
+  stacks: Stack[];
+}
+
+export interface OrderItem {
+  photoId: string;
+  price: number;
+}
+
+export interface Order {
+  id: string;
+  date: string;
+  items: OrderItem[];
+  total: number;
+}
+
+export interface DemoUser {
+  id: string;           // slug
   name: string;
+  role: Role;
   email: string;
-  avatarUrl?: string;
-  stacks?: PhotoStack[]; // photographers & schools showcase stacks
+  password: string;     // demo only
+  avatarUrl: string;
+  portfolio: Portfolio;
+  cart: OrderItem[];
+  orders: Order[];
 }
