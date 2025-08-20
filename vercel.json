@@ -1,1 +1,5 @@
-{"rewrites":[{"source":"/","destination":"/maintenance.html"},{"source":"/live","destination":"/index.html"}]}
+{
+  "rewrites": [
+    { "source": "/live", "destination": "/live.html" }
+  ]
+}

@@ -5,11 +5,11 @@ export default defineConfig({
   plugins: [react()],
   base: '/',
   build: {
-    outDir: 'dist',        // <- no more dist/internal
+    outDir: 'dist',
     emptyOutDir: true,
     rollupOptions: {
       input: {
-        main: 'index.html', // maintenance/root entry
+        main: 'index.html', // maintenance at /
         live: 'live.html',  // orange app at /live
       },
     },
