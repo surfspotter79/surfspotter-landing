@@ -33,10 +33,12 @@ const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(
 // Make photos with IDs + price
 function makePhotos(urls: string[]): Photo[] {
   return urls.map((url, i) => ({
-    id: `ph_${uid()}_${i}`,
+    id: `ph_${Math.random().toString(36).slice(2, 9)}_${i}`,
     url,
     title: "Surf Shot",
-    price: euro()
+    price: Math.round(Math.random()*40)+9,
+    likes: Math.floor(Math.random()*450)+25,            // NEW
+    uploadedAt: new Date(Date.now() - Math.random()*1000*60*60*24*30).toISOString() // 0–30 days
   }));
 }
 

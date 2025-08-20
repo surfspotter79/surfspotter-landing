@@ -12,6 +12,8 @@ export interface Photo {
   title?: string;
   price?: number;      // EUR
   keywords?: string[];
+  likes?: number;          // NEW
+  uploadedAt?: string;     // NEW ISO date
 }
 
 export interface Album {

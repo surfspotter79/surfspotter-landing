@@ -2,6 +2,8 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Directory from "./pages/Directory";
 import Dashboard from "./pages/Dashboard";
 import Signup from "./pages/Signup";
+import Explore from "./pages/Explore";
+
 
 export default function App() {
   return (
@@ -11,6 +13,7 @@ export default function App() {
       <Route path="/demos" element={<Directory />} />
       <Route path="/dashboard/:id" element={<Dashboard />} />
       <Route path="*" element={<Navigate to="/demos" replace />} />
+      <Route path="/explore" element={<Explore />} />
     </Routes>
   );
 }
