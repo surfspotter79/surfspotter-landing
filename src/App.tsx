@@ -1,31 +1,41 @@
-mkdir -p src/pages
+cat > src/App.tsx <<'TSX'
+import { Route, Routes, Navigate, Link, NavLink } from "react-router-dom";
+import Home from "./pages/Home";
+import Photographers from "./pages/Photographers";
+import Schools from "./pages/Schools";
+import Surfers from "./pages/Surfers";
+import Visitors from "./pages/Visitors";
+import Profile from "./pages/Profile";
 
-cat > src/pages/Directory.tsx <<'TSX'
-import type { User } from "../types";
+const item = "px-3 py-2 rounded hover:bg-white/10";
+const active = ({ isActive }: any) => `${item} ${isActive ? "bg-white/10" : ""}`;
 
-export default function Directory({ title, users }: { title: string; users: User[] }) {
+export default function App() {
   return (
-    <div className="text-white max-w-6xl mx-auto px-4 py-10">
-      <h2 className="text-3xl font-semibold mb-6">{title}</h2>
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {users.map((u) => (
-          <a
-            key={u.id}
-            href={`/live/profile/${u.id}`}
-            className="bg-black/40 rounded-2xl p-4 hover:bg-black/50 transition text-white"
-          >
-            <div className="flex items-center gap-3">
-              <img src={u.avatar} className="w-12 h-12 rounded-full object-cover" />
-              <div>
-                <div className="font-semibold">{u.displayName}</div>
-                <div className="text-xs opacity-70">
-                  {u.role} • {u.location}
-                </div>
-              </div>
-            </div>
-          </a>
-        ))}
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-orange-400 via-pink-500 to-rose-600">
+      <header className="sticky top-0 z-20 backdrop-blur bg-black/30">
+        <div className="max-w-6xl mx-auto flex items-center gap-4 px-4 py-3 text-white">
+          <Link to="/" className="font-semibold">Surfspotter</Link>
+          <nav className="flex gap-1 text-sm">
+            <NavLink to="/photographers" className={active}>Photographers</NavLink>
+            <NavLink to="/schools" className={active}>Schools</NavLink>
+            <NavLink to="/surfers" className={active}>Surfers</NavLink>
+            <NavLink to="/users" className={active}>Visitors</NavLink>
+          </nav>
+          <div className="ml-auto text-xs opacity-70">demo</div>
+        </div>
+      </header>
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/photographers" element={<Photographers />} />
+        <Route path="/schools" element={<Schools />} />
+        <Route path="/surfers" element={<Surfers />} />
+        <Route path="/users" element={<Visitors />} />
+        <Route path="/profile/:id" element={<Profile />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
     </div>
   );
 }
+TSX
