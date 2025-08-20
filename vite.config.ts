@@ -3,9 +3,15 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/internal/',                 // we serve the app under /internal
+  base: '/',
   build: {
-    outDir: 'dist/internal',          // put index.html at dist/internal/index.html
-    copyPublicDir: true               // copy everything from /public into dist/internal
-  }
+    outDir: 'dist',        // <- no more dist/internal
+    emptyOutDir: true,
+    rollupOptions: {
+      input: {
+        main: 'index.html', // maintenance/root entry
+        live: 'live.html',  // orange app at /live
+      },
+    },
+  },
 })
