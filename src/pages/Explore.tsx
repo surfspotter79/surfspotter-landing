@@ -63,12 +63,12 @@ export default function ExplorePage() {
                 }}
               >
                 <div style={{ position: "relative", aspectRatio: "4/3", background: "#f4f5f7" }}>
-                  <img
-                    src={p.url}
-                    alt={`${p.spot}`}
-                    style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", filter: "grayscale(5%)" }}
-                    loading="lazy"
-                  />
+                  <SmartImage
+                    src={photo.url}
+                    alt={`${photo.spot}`}
+                    width={600}
+                    height={450}
+                />
                   <div style={wmThumb}>SurfSpotter</div>
                 </div>
                 <div style={{ padding: 10, display: "grid", gap: 8 }}>
@@ -78,12 +78,11 @@ export default function ExplorePage() {
                   </div>
                   {u && (
                     <div style={{ display: "flex", alignItems: "center", gap: 8, opacity: 0.9 }}>
-                      <img
-                        src={u.avatar}
-                        alt={u.name}
-                        width={24}
-                        height={24}
-                        style={{ borderRadius: "50%" }}
+                      <SmartImage
+                        src={photo.url}
+                        alt={`${photo.spot}`}
+                        width={600}
+                        height={450}
                       />
                       <span style={{ fontSize: 14 }}>{u.name}</span>
                     </div>

@@ -147,6 +147,20 @@
         font-size: .92rem;
       }
     </style>
+    <!-- Preload hero image for faster Largest Contentful Paint -->
+    <link rel="preload" as="image" href="/hero/mikey-february-natural-selection-surf-practice-day.jpeg" imagesrcset="/hero/mikey-february-natural-selection-surf-practice-day.jpeg 1x, /hero/mikey-february-natural-selection-surf-practice-day.jpeg 2x">
+
+    <style>
+      /* Apply to your hero container (common names covered) */
+      .hero, .hero-bg, .hero-image, header.hero, section.hero {
+        background-image:
+          linear-gradient(0deg, rgba(0,0,0,.35), rgba(0,0,0,.35)),
+          url('/hero/mikey-february-natural-selection-surf-practice-day.jpeg');
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+      }
+    </style>
   </head>
   <body>
     <!-- HAMBURGER -->
