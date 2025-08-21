@@ -1,218 +1,165 @@
 // src/data/seed.ts
-// Real surf photos via Unsplash random; optional Cloudinary watermark (baked-in).
-// Works out of the box; set VITE_CLOUD_NAME to enable Cloudinary fetch + watermark.
-
-export type Category =
-  | "pro_photographer"
-  | "pro_surfer"
-  | "surf_school"
-  | "amateur_photographer"
-  | "amateur_surfer"
-  | "spots";
-
-export type User = {
-  id: string;
-  name: string;
-  role: Exclude<Category, "spots">;
-  avatar: string;
-};
+// Minimal demo data + helpers used by Explore and PhotoDetail.
 
 export type Photo = {
   id: string;
-  url: string;
-  spot: string;
-  likes: number;
-  createdAt: string; // ISO
   userId: string;
-  category: Category;
+  spot: string;
+  url: string;        // large image
+  thumbUrl?: string;  // optional smaller thumbnail
   priceCents: number;
+  likes: number;
+  createdAt: string;  // ISO date
 };
 
-// ------- helpers: Unsplash + optional Cloudinary watermark -------
+// A small surf set (remote images from Unsplash)
+// Tip: you can replace any url/thumbUrl with your own later.
+const photos: Photo[] = [
+  {
+    id: "pipe-01",
+    userId: "pro-photog-1",
+    spot: "Pipeline, Hawaii",
+    url: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1600&q=60",
+    thumbUrl:
+      "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=600&q=60",
+    priceCents: 1199,
+    likes: 324,
+    createdAt: "2024-12-27T10:00:00.000Z",
+  },
+  {
+    id: "teahupoo-01",
+    userId: "pro-photog-2",
+    spot: "Teahupo’o, Tahiti",
+    url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=60",
+    thumbUrl:
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=60",
+    priceCents: 1599,
+    likes: 501,
+    createdAt: "2025-01-03T12:00:00.000Z",
+  },
+  {
+    id: "uluwatu-01",
+    userId: "pro-photog-1",
+    spot: "Uluwatu, Bali",
+    url: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1600&q=60",
+    thumbUrl:
+      "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=600&q=60",
+    priceCents: 999,
+    likes: 278,
+    createdAt: "2025-01-10T09:00:00.000Z",
+  },
+  {
+    id: "nazare-01",
+    userId: "pro-photog-3",
+    spot: "Nazaré, Portugal",
+    url: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=60",
+    thumbUrl:
+      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=600&q=60",
+    priceCents: 1899,
+    likes: 742,
+    createdAt: "2025-02-05T15:30:00.000Z",
+  },
+  {
+    id: "jbay-01",
+    userId: "pro-photog-4",
+    spot: "Jeffreys Bay, South Africa",
+    url: "https://images.unsplash.com/photo-1478562853135-c3c9e3ef7905?auto=format&fit=crop&w=1600&q=60",
+    thumbUrl:
+      "https://images.unsplash.com/photo-1478562853135-c3c9e3ef7905?auto=format&fit=crop&w=600&q=60",
+    priceCents: 1299,
+    likes: 403,
+    createdAt: "2025-02-11T08:00:00.000Z",
+  },
+  {
+    id: "hossegor-01",
+    userId: "pro-photog-5",
+    spot: "Hossegor, France",
+    url: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1600&q=60",
+    thumbUrl:
+      "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=600&q=60",
+    priceCents: 899,
+    likes: 255,
+    createdAt: "2025-02-14T14:00:00.000Z",
+  },
+  {
+    id: "snapper-01",
+    userId: "pro-photog-6",
+    spot: "Snapper Rocks, Australia",
+    url: "https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1600&q=60",
+    thumbUrl:
+      "https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=600&q=60",
+    priceCents: 1099,
+    likes: 366,
+    createdAt: "2025-02-16T10:45:00.000Z",
+  },
+  {
+    id: "mavericks-01",
+    userId: "pro-photog-3",
+    spot: "Mavericks, California",
+    url: "https://images.unsplash.com/photo-1493558103817-58b2924bce98?auto=format&fit=crop&w=1600&q=60",
+    thumbUrl:
+      "https://images.unsplash.com/photo-1493558103817-58b2924bce98?auto=format&fit=crop&w=600&q=60",
+    priceCents: 1699,
+    likes: 621,
+    createdAt: "2025-02-18T07:20:00.000Z",
+  },
+  {
+    id: "mentawai-01",
+    userId: "pro-photog-7",
+    spot: "Mentawai, Indonesia",
+    url: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=1600&q=60",
+    thumbUrl:
+      "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=600&q=60",
+    priceCents: 1399,
+    likes: 292,
+    createdAt: "2025-02-20T11:05:00.000Z",
+  },
+  {
+    id: "tamarama-01",
+    userId: "pro-photog-8",
+    spot: "Tamarama, Australia",
+    url: "https://images.unsplash.com/photo-1500375592092-39e3c2a43a3f?auto=format&fit=crop&w=1600&q=60",
+    thumbUrl:
+      "https://images.unsplash.com/photo-1500375592092-39e3c2a43a3f?auto=format&fit=crop&w=600&q=60",
+    priceCents: 999,
+    likes: 211,
+    createdAt: "2025-02-21T13:00:00.000Z",
+  },
+  {
+    id: "raglan-01",
+    userId: "pro-photog-9",
+    spot: "Raglan, New Zealand",
+    url: "https://images.unsplash.com/photo-1441829266145-b7a5f54f2445?auto=format&fit=crop&w=1600&q=60",
+    thumbUrl:
+      "https://images.unsplash.com/photo-1441829266145-b7a5f54f2445?auto=format&fit=crop&w=600&q=60",
+    priceCents: 1099,
+    likes: 188,
+    createdAt: "2025-02-22T09:40:00.000Z",
+  },
+  {
+    id: "ericeira-01",
+    userId: "pro-photog-5",
+    spot: "Ericeira, Portugal",
+    url: "https://images.unsplash.com/photo-1482192596544-9eb780fc7f66?auto=format&fit=crop&w=1600&q=60",
+    thumbUrl:
+      "https://images.unsplash.com/photo-1482192596544-9eb780fc7f66?auto=format&fit=crop&w=600&q=60",
+    priceCents: 899,
+    likes: 174,
+    createdAt: "2025-02-23T16:10:00.000Z",
+  },
+];
 
-const UNSPLASH_BASE = "https://source.unsplash.com";
-
-// Surf photo URL (random but stable-ish with sig)
-function surf(i: number, tags: string[] = []) {
-  const q = ["surfing", "surfer", "wave", "ocean", ...tags].join(",");
-  return `${UNSPLASH_BASE}/1200x900/?${encodeURIComponent(q)}&sig=${i}`;
-}
-
-// If VITE_CLOUD_NAME is set, fetch image through Cloudinary with watermark baked into pixels.
-function wm(u: string) {
-  const name = import.meta.env.VITE_CLOUD_NAME;
-  if (!name) return u; // fall back to direct Unsplash
-  // Transformations: fit, quality, format, then text overlay bottom-right.
-  const t = [
-    "w_1200",
-    "h_900",
-    "c_fill",
-    "q_auto",
-    "f_auto",
-    "l_text:Montserrat_90_bold:SurfSpotter",
-    "co_white",
-    "o_35",
-    "g_south_east",
-    "x_40",
-    "y_40"
-  ].join(",");
-  return `https://res.cloudinary.com/${name}/image/fetch/${t}/${encodeURIComponent(u)}`;
-}
-
-// ------- storage keys -------
-
-const USERS_KEY = "ss_demo_v2_users";
-const PHOTOS_KEY = "ss_demo_v2_photos";
-
-// ------- users (same structure, 5 per role) -------
-
-export function demoUsers(): User[] {
-  return [
-    // Pro Photographers
-    { id: "u_pp_1", name: "Kai Moreno", role: "pro_photographer", avatar: "https://picsum.photos/seed/kai/80" },
-    { id: "u_pp_2", name: "Maya Steele", role: "pro_photographer", avatar: "https://picsum.photos/seed/maya/80" },
-    { id: "u_pp_3", name: "Zane Wilder", role: "pro_photographer", avatar: "https://picsum.photos/seed/zane/80" },
-    { id: "u_pp_4", name: "Lea Tanaka", role: "pro_photographer", avatar: "https://picsum.photos/seed/lea/80" },
-    { id: "u_pp_5", name: "Nova Quinn", role: "pro_photographer", avatar: "https://picsum.photos/seed/nova/80" },
-
-    // Pro Surfers
-    { id: "u_ps_1", name: "Ryder Hale", role: "pro_surfer", avatar: "https://picsum.photos/seed/ryder/80" },
-    { id: "u_ps_2", name: "Sage Flores", role: "pro_surfer", avatar: "https://picsum.photos/seed/sage/80" },
-    { id: "u_ps_3", name: "Koa Silva", role: "pro_surfer", avatar: "https://picsum.photos/seed/koa/80" },
-    { id: "u_ps_4", name: "Isla Brooks", role: "pro_surfer", avatar: "https://picsum.photos/seed/isla/80" },
-    { id: "u_ps_5", name: "Taj Reed", role: "pro_surfer", avatar: "https://picsum.photos/seed/taj/80" },
-
-    // Surf Schools
-    { id: "u_ss_1", name: "Ericeira Surf Co", role: "surf_school", avatar: "https://picsum.photos/seed/ericeira/80" },
-    { id: "u_ss_2", name: "Peniche Wave Lab", role: "surf_school", avatar: "https://picsum.photos/seed/peniche/80" },
-    { id: "u_ss_3", name: "Hossegor Academy", role: "surf_school", avatar: "https://picsum.photos/seed/hossegor/80" },
-    { id: "u_ss_4", name: "Bali Reef School", role: "surf_school", avatar: "https://picsum.photos/seed/bali/80" },
-    { id: "u_ss_5", name: "Gold Coast Surf", role: "surf_school", avatar: "https://picsum.photos/seed/goldcoast/80" },
-
-    // Amateur Photographers
-    { id: "u_ap_1", name: "Milo Hart", role: "amateur_photographer", avatar: "https://picsum.photos/seed/milo/80" },
-    { id: "u_ap_2", name: "Pia Rivera", role: "amateur_photographer", avatar: "https://picsum.photos/seed/pia/80" },
-    { id: "u_ap_3", name: "Theo Nash", role: "amateur_photographer", avatar: "https://picsum.photos/seed/theo/80" },
-    { id: "u_ap_4", name: "Ava Kim", role: "amateur_photographer", avatar: "https://picsum.photos/seed/ava/80" },
-    { id: "u_ap_5", name: "Ezra Cole", role: "amateur_photographer", avatar: "https://picsum.photos/seed/ezra/80" },
-
-    // Amateur Surfers
-    { id: "u_as_1", name: "Luca Park", role: "amateur_surfer", avatar: "https://picsum.photos/seed/luca/80" },
-    { id: "u_as_2", name: "Nia Blue", role: "amateur_surfer", avatar: "https://picsum.photos/seed/nia/80" },
-    { id: "u_as_3", name: "Ozzie Lane", role: "amateur_surfer", avatar: "https://picsum.photos/seed/ozzie/80" },
-    { id: "u_as_4", name: "Remy Fox", role: "amateur_surfer", avatar: "https://picsum.photos/seed/remy/80" },
-    { id: "u_as_5", name: "Sia Moon", role: "amateur_surfer", avatar: "https://picsum.photos/seed/sia/80" },
-  ];
-}
-
-// helper: pick user id round-robin for a role
-function userFor(role: User["role"], index: number, users: User[]): string {
-  const list = users.filter(u => u.role === role);
-  return list[index % list.length].id;
-}
-
-export function ensureDemoSeed() {
-  if (typeof window === "undefined") return;
-  const hasUsers = !!localStorage.getItem(USERS_KEY);
-  const hasPhotos = !!localStorage.getItem(PHOTOS_KEY);
-  if (hasUsers && hasPhotos) return;
-
-  const users = demoUsers();
-  const price = 2500; // €25.00
-  const now = Date.now();
-  const daysAgo = (n: number) => new Date(now - n * 864e5).toISOString();
-
-  // Define a few iconic spots (used as keywords to steer Unsplash)
-  const SPOTS = [
-    "Ericeira Reef",
-    "Supertubos",
-    "Hossegor",
-    "Uluwatu",
-    "Pipeline",
-    "Teahupo'o",
-    "Mavericks",
-    "Cloudbreak",
-    "Nazaré",
-    "Jeffreys Bay",
-    "Raglan",
-    "Lagide",
-    "Coxos",
-    "Belharra",
-    "Mundaka",
-    "G-Land"
-  ];
-
-  // Generate ~36 photos across categories with real surf images
-  const photos: Photo[] = [];
-  let i = 1;
-
-  function pushBatch(role: User["role"], count: number, spotNames: string[], extraTags: string[] = []) {
-    for (let k = 0; k < count; k++) {
-      const spot = spotNames[(i + k) % spotNames.length];
-      const tags = [spot.replace(/\s+/g, "_").toLowerCase(), ...extraTags];
-      const id = `p${i}`;
-      photos.push({
-        id,
-        url: wm(surf(i, tags)),
-        spot,
-        likes: Math.floor(60 + (i * 13) % 200),
-        createdAt: daysAgo((i * 3) % 14),
-        userId: userFor(role, i, users),
-        category: role === "pro_surfer" || role === "amateur_surfer" ? role : (role as Category),
-        priceCents: price
-      });
-      i++;
-    }
-  }
-
-  // Distribute photos
-  pushBatch("pro_photographer", 8, ["Ericeira Reef", "Supertubos", "Hossegor", "Uluwatu"], ["pro","photography"]);
-  pushBatch("pro_surfer",       6, ["Pipeline", "J-Bay", "Teahupo'o", "Mavericks", "Cloudbreak"], ["pro","action"]);
-  pushBatch("surf_school",      5, ["Peniche", "Ericeira", "Hossegor", "Bali", "Gold Coast"], ["lesson","longboard"]);
-  pushBatch("amateur_photographer", 5, ["Ericeira", "Supertubos", "Hossegor", "Bali", "J-Bay"], ["amateur","shore"]);
-  pushBatch("amateur_surfer",   5, ["Ericeira", "Supertubos", "Hossegor", "Bali", "J-Bay"], ["session","fun"]);
-  // “spots” category (curated peaks)
-  for (const spot of SPOTS.slice(0, 7)) {
-    photos.push({
-      id: `p${i}`,
-      url: wm(surf(i, [spot.replace(/\s+/g,"_").toLowerCase(), "landscape"])),
-      spot,
-      likes: Math.floor(70 + (i * 11) % 220),
-      createdAt: daysAgo((i * 2) % 12),
-      userId: userFor("pro_photographer", i, demoUsers()),
-      category: "spots",
-      priceCents: price
-    });
-    i++;
-  }
-
-  localStorage.setItem(USERS_KEY, JSON.stringify(users));
-  localStorage.setItem(PHOTOS_KEY, JSON.stringify(photos));
-}
-
-export function getUsers(): User[] {
-  if (typeof window === "undefined") return [];
-  try { return JSON.parse(localStorage.getItem(USERS_KEY) || "[]"); } catch { return []; }
-}
+// Public API used by your components:
 
 export function getPhotos(): Photo[] {
-  if (typeof window === "undefined") return [];
-  try { return JSON.parse(localStorage.getItem(PHOTOS_KEY) || "[]"); } catch { return []; }
-}
-
-export function filterAndSortPhotos(cat: Category, sort: "mostLiked" | "latest"): Photo[] {
-  let list = getPhotos();
-  list = (cat === "spots") ? list.filter(p => p.category === "spots") : list.filter(p => p.category === cat);
-  if (sort === "mostLiked") list.sort((a,b)=> b.likes - a.likes);
-  else list.sort((a,b)=> +new Date(b.createdAt) - +new Date(a.createdAt));
-  return list;
+  return photos;
 }
 
 export function getPhoto(id: string): Photo | undefined {
-  return getPhotos().find(p => p.id === id);
+  return photos.find((p) => p.id === id);
 }
 
+// “Stack” = other photos from the same spot (for the bundle button)
 export function getStackFor(photo: Photo): Photo[] {
-  // simple stack: same user + same spot
-  return getPhotos().filter(p => p.userId === photo.userId && p.spot === photo.spot);
+  return photos.filter((p) => p.spot === photo.spot);
 }
