@@ -2,17 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
     <!-- SEO -->
     <title>SurfSpotter – Epic Surf Photography Platform</title>
-    <meta
-      name="description"
-      content="Discover the world's most stunning surf photography from top spots. Upload, explore, and get inspired by wave-riding moments."
-    />
+    <meta name="description" content="Discover the world's most stunning surf photography from top spots. Upload, explore, and get inspired by wave-riding moments." />
     <meta name="robots" content="index, follow" />
 
     <!-- Open Graph -->
@@ -37,29 +31,16 @@
       gtag("config", "G-8YBC63GN6D");
     </script>
 
-    <!-- Optional: keep only if you actually have /public/style.css; not required for the hero below -->
+    <!-- Optional global stylesheet -->
     <link rel="stylesheet" href="/style.css" />
 
-    <!-- Minimal landing styles (orange gradient hero + buttons + hamburger) -->
+    <!-- Minimal landing styles (unchanged) -->
     <style>
-      :root {
-        --fg: #0b0b0c;
-        --bg: #fff;
-        --glass: rgba(255,255,255,.12);
-      }
-      @media (prefers-color-scheme: dark){
-        :root { --fg:#fff; --bg:#0b0b0c; --glass: rgba(255,255,255,.1); }
-      }
-      * { box-sizing: border-box; }
-      html, body { height: 100%; }
-      body {
-        margin: 0;
-        font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-        color: var(--fg);
-        background: var(--bg);
-      }
-
-      /* HAMBURGER (your existing styles, slightly refined) */
+      :root { --fg:#0b0b0c; --bg:#fff; --glass:rgba(255,255,255,.12) }
+      @media (prefers-color-scheme: dark){ :root { --fg:#fff; --bg:#0b0b0c; --glass:rgba(255,255,255,.1) } }
+      *{box-sizing:border-box}
+      html,body{height:100%}
+      body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--fg);background:var(--bg)}
       .ss-menu-wrap{position:fixed;top:12px;right:16px;z-index:9999}
       .ss-menu-btn{display:flex;align-items:center;gap:.5rem;background:#fff;border:1px solid rgba(0,0,0,.08);box-shadow:0 6px 24px rgba(0,0,0,.08);border-radius:999px;padding:.5rem .85rem;cursor:pointer}
       .ss-menu-btn svg{width:20px;height:20px}
@@ -76,82 +57,22 @@
         .ss-menu a:hover{background:rgba(255,255,255,.06)}
         .ss-chip{background:#1f2937;color:#e5e7eb}
       }
-
-      /* HERO */
-      .hero {
-        min-height: 100vh;
-        display: grid;
-        place-items: center;
-        background: linear-gradient(135deg, #ff7a18, #ffb347 35%, #ffd194);
-        position: relative;
-        overflow: hidden;
-      }
-      .hero::after {
-        content:"";
-        position:absolute; inset:0;
-        background: radial-gradient(60% 60% at 75% 15%, rgba(255,255,255,.35), transparent 60%),
-                    radial-gradient(40% 40% at 10% 80%, rgba(255,255,255,.25), transparent 60%);
-        pointer-events:none;
-      }
-      .hero-inner {
-        width: min(1100px, 92vw);
-        margin: 0 auto;
-        position: relative;
-        z-index: 1;
-        text-align: center;
-        color: #111;
-      }
-      .brand {
-        display:inline-flex; align-items:center; gap:.6rem;
-        padding:.45rem .7rem; border-radius:999px;
-        background: rgba(255,255,255,.65);
-        border: 1px solid rgba(0,0,0,.08);
-        box-shadow: 0 8px 24px rgba(0,0,0,.08);
-        margin-bottom: 14px;
-        font-weight: 600;
-      }
-      .hero h1 {
-        font-size: clamp(2.2rem, 4.8vw, 4rem);
-        line-height: 1.05;
-        margin: 10px 0 12px;
-      }
-      .hero p.lede {
-        font-size: clamp(1rem, 2vw, 1.2rem);
-        opacity: .9;
-        margin: 0 auto 22px;
-        max-width: 72ch;
-      }
-      .cta {
-        display:flex; gap:12px; align-items:center; justify-content:center;
-        flex-wrap: wrap;
-      }
-      .btn {
-        appearance: none;
-        border: 1px solid rgba(0,0,0,.12);
-        background: #fff;
-        color: #111;
-        padding: .8rem 1.2rem;
-        border-radius: 999px;
-        font-weight: 600;
-        text-decoration: none;
-        box-shadow: 0 8px 24px rgba(0,0,0,.08);
-      }
-      .btn.primary {
-        background: #111;
-        color: #fff;
-        border-color: #111;
-      }
-      .subnote {
-        margin-top: 12px;
-        opacity: .8;
-        font-size: .92rem;
-      }
+      .hero{min-height:100vh;display:grid;place-items:center;background:linear-gradient(135deg,#ff7a18,#ffb347 35%,#ffd194);position:relative;overflow:hidden}
+      .hero::after{content:"";position:absolute;inset:0;background:radial-gradient(60% 60% at 75% 15%,rgba(255,255,255,.35),transparent 60%),radial-gradient(40% 40% at 10% 80%,rgba(255,255,255,.25),transparent 60%);pointer-events:none}
+      .hero-inner{width:min(1100px,92vw);margin:0 auto;position:relative;z-index:1;text-align:center;color:#111}
+      .brand{display:inline-flex;align-items:center;gap:.6rem;padding:.45rem .7rem;border-radius:999px;background:rgba(255,255,255,.65);border:1px solid rgba(0,0,0,.08);box-shadow:0 8px 24px rgba(0,0,0,.08);margin-bottom:14px;font-weight:600}
+      .hero h1{font-size:clamp(2.2rem,4.8vw,4rem);line-height:1.05;margin:10px 0 12px}
+      .hero p.lede{font-size:clamp(1rem,2vw,1.2rem);opacity:.9;margin:0 auto 22px;max-width:72ch}
+      .cta{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap}
+      .btn{appearance:none;border:1px solid rgba(0,0,0,.12);background:#fff;color:#111;padding:.8rem 1.2rem;border-radius:999px;font-weight:600;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.08)}
+      .btn.primary{background:#111;color:#fff;border-color:#111}
+      .subnote{margin-top:12px;opacity:.8;font-size:.92rem}
     </style>
-    <!-- Preload hero image for faster Largest Contentful Paint -->
+
+    <!-- Preload hero image -->
     <link rel="preload" as="image" href="/hero/mikey-february-natural-selection-surf-practice-day.jpeg" imagesrcset="/hero/mikey-february-natural-selection-surf-practice-day.jpeg 1x, /hero/mikey-february-natural-selection-surf-practice-day.jpeg 2x">
 
     <style>
-      /* Apply to your hero container (common names covered) */
       .hero, .hero-bg, .hero-image, header.hero, section.hero {
         background-image:
           linear-gradient(0deg, rgba(0,0,0,.35), rgba(0,0,0,.35)),
@@ -161,6 +82,16 @@
         background-repeat: no-repeat;
       }
     </style>
+
+    <!-- SAFETY SHIM: neutralize stray test calls so nothing crashes -->
+    <script>
+      (function (w) {
+        w.it       = w.it       || function(){};
+        w.describe = w.describe || function(){};
+        w.test     = w.test     || function(){};
+        w.i        = w.i        || function(){};
+      })(window);
+    </script>
   </head>
   <body>
     <!-- HAMBURGER -->

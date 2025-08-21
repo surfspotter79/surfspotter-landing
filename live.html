@@ -1,12 +1,33 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SurfSpotter</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>SurfSpotter App</title>
+    <link rel="stylesheet" href="/style.css" />
+
+    <!-- SAFETY SHIM (runs before any module) -->
+    <script>
+      (function (w) {
+        w.it       = w.it       || function(){};
+        w.describe = w.describe || function(){};
+        w.test     = w.test     || function(){};
+        w.i        = w.i        || function(){};
+      })(window);
+    </script>
+
+    <style>
+      body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+      #root{min-height:100dvh;display:block}
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- quick visual while React boots -->
+      <div style="padding:24px;font-size:28px;font-weight:800">✅ App is running</div>
+    </div>
+
+    <!-- This is what Vite uses in dev; it gets rewritten to /assets/... in production -->
     <script type="module" src="/src/live.tsx"></script>
   </body>
 </html>

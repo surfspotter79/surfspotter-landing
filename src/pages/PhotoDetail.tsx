@@ -1,4 +1,3 @@
-// src/pages/PhotoDetail.tsx
 import { useMemo } from "react";
 import { useParams } from "react-router-dom";
 import BackBar from "../components/BackBar";
@@ -6,10 +5,9 @@ import { getPhoto, getStackFor } from "../data/seed";
 
 export default function PhotoDetail() {
   const { id = "" } = useParams();
-  const photo = getPhoto(id);
-  const stack = useMemo(() => (photo ? getStackFor(photo) : []), [photo]);
+  const photoMaybe = getPhoto(id);
 
-  if (!photo) {
+  if (!photoMaybe) {
     return (
       <div>
         <BackBar title="Photo" />
@@ -18,11 +16,10 @@ export default function PhotoDetail() {
     );
   }
 
-  // lock in the narrowed type
-  const p = photo;
-
+  const p = photoMaybe; // now definitely a Photo
+  const stack = useMemo(() => getStackFor(p), [p]);
   const stackCount = stack.length;
-  const stackSubtotal = stack.reduce((sum, item) => sum + item.priceCents, 0);
+  const stackSubtotal = stack.reduce((sum, ph) => sum + ph.priceCents, 0);
   const stackTotal = Math.round(stackSubtotal * 0.8); // 20% bundle discount
 
   async function checkoutSingle() {
@@ -72,38 +69,15 @@ export default function PhotoDetail() {
   return (
     <div>
       <BackBar title={p.spot} />
-      <div
-        style={{
-          maxWidth: 1100,
-          margin: "14px auto",
-          padding: "0 16px",
-          display: "grid",
-          gap: 16
-        }}
-      >
-        {/* Large image with watermark */}
-        <div
-          style={{
-            position: "relative",
-            borderRadius: 12,
-            overflow: "hidden",
-            border: "1px solid rgba(0,0,0,.08)"
-          }}
-        >
+      <div style={{ maxWidth: 1100, margin: "14px auto", padding: "0 16px", display: "grid", gap: 16 }}>
+        {/* Image with watermark */}
+        <div style={{ position: "relative", borderRadius: 12, overflow: "hidden", border: "1px solid rgba(0,0,0,.08)" }}>
           <div style={{ position: "relative", aspectRatio: "4/3", background: "#f4f5f7" }}>
             <img
               src={p.url}
               alt={p.spot}
-              style={{
-                position: "absolute",
-                inset: 0,
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                filter: "grayscale(5%)"
-              }}
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", filter: "grayscale(5%)" }}
             />
-            {/* Watermark overlay */}
             <div style={wmOverlay}>SurfSpotter</div>
           </div>
         </div>

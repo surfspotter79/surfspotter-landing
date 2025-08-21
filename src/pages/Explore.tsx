@@ -12,8 +12,6 @@ function useQuery() {
 export default function Explore() {
   const q = useQuery();
   const cat = q.get("cat") || "spots";
-
-  // Adjust this filter to your liking. For now, just show all.
   const photos: Photo[] = getPhotos();
 
   return (
