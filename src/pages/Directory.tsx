@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { loadUsers, seedDemosIfEmpty } from "../data/demoUsers";
 import type { DemoUser, Role } from "../types/users";
 import { Link } from "react-router-dom";
+import PhotoCard from "../components/PhotoCard";
+import { surfThumbs } from "../data/sampleImages";
 
 const ROLES: { key: Role; label: string }[] = [
   { key: "pro_photographer", label: "Pro Photographers" },

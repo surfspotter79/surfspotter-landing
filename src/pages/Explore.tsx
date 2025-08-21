@@ -4,6 +4,10 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { ensureDemoSeed, filterAndSortPhotos, getUsers, type Category } from "../data/seed";
 import { FilterBar } from "../components/FilterBar";
 import BackBar from "../components/BackBar";
+import { surfThumbs } from "../data/sampleImages";
+import PhotoCard from "../components/PhotoCard";
+import SmartImage from "../components/SmartImage";
+
 
 function useQueryState() {
   const [sp, setSp] = useSearchParams();
@@ -63,11 +67,14 @@ export default function ExplorePage() {
                 }}
               >
                 <div style={{ position: "relative", aspectRatio: "4/3", background: "#f4f5f7" }}>
-                  <SmartImage
-                    src={photo.url}
-                    alt={`${photo.spot}`}
-                    width={600}
-                    height={450}
+                  <PhotoCard
+                    key={it.id}
+                    title={it.title}
+                    author={it.author}
+                    likes={it.likes}
+                    date={it.date}
+                    imageUrl={surfThumbs[i % surfThumbs.length]}
+                    onClick={() => navigate(`/live#/photo/${it.id}`)}
                 />
                   <div style={wmThumb}>SurfSpotter</div>
                 </div>
@@ -78,12 +85,15 @@ export default function ExplorePage() {
                   </div>
                   {u && (
                     <div style={{ display: "flex", alignItems: "center", gap: 8, opacity: 0.9 }}>
-                      <SmartImage
-                        src={photo.url}
-                        alt={`${photo.spot}`}
-                        width={600}
-                        height={450}
-                      />
+                      <PhotoCard
+                        key={it.id}
+                        title={it.title}
+                        author={it.author}
+                        likes={it.likes}
+                        date={it.date}
+                        imageUrl={surfThumbs[i % surfThumbs.length]}
+                        onClick={() => navigate(`/live#/photo/${it.id}`)}
+                    />
                       <span style={{ fontSize: 14 }}>{u.name}</span>
                     </div>
                   )}

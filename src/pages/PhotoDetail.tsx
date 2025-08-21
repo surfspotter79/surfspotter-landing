@@ -18,8 +18,11 @@ export default function PhotoDetail() {
     );
   }
 
+  // lock in the narrowed type
+  const p = photo;
+
   const stackCount = stack.length;
-  const stackSubtotal = stack.reduce((sum, p) => sum + p.priceCents, 0);
+  const stackSubtotal = stack.reduce((sum, item) => sum + item.priceCents, 0);
   const stackTotal = Math.round(stackSubtotal * 0.8); // 20% bundle discount
 
   async function checkoutSingle() {
@@ -29,14 +32,13 @@ export default function PhotoDetail() {
       body: JSON.stringify({
         currency: "eur",
         successUrl: `${location.origin}/live#/thankyou`,
-        cancelUrl: `${location.origin}/live#/photo/${photo.id}`,
+        cancelUrl: `${location.origin}/live#/photo/${p.id}`,
         items: [
           {
-            name: `${photo.spot} – Photo`,
-            amount: photo.priceCents,
+            name: `${p.spot} – Photo`,
+            amount: p.priceCents,
             quantity: 1,
-            // You can pass metadata like photoId to fulfill later:
-            metadata: { photoId: photo.id }
+            metadata: { photoId: p.id }
           }
         ]
       })
@@ -52,13 +54,13 @@ export default function PhotoDetail() {
       body: JSON.stringify({
         currency: "eur",
         successUrl: `${location.origin}/live#/thankyou`,
-        cancelUrl: `${location.origin}/live#/photo/${photo.id}`,
+        cancelUrl: `${location.origin}/live#/photo/${p.id}`,
         items: [
           {
-            name: `${photo.spot} – Stack (${stackCount} photos)`,
+            name: `${p.spot} – Stack (${stackCount} photos)`,
             amount: stackTotal,
             quantity: 1,
-            metadata: { stackSpot: photo.spot, userId: photo.userId }
+            metadata: { stackSpot: p.spot, userId: p.userId }
           }
         ]
       })
@@ -69,15 +71,37 @@ export default function PhotoDetail() {
 
   return (
     <div>
-      <BackBar title={photo.spot} />
-      <div style={{ maxWidth: 1100, margin: "14px auto", padding: "0 16px", display: "grid", gap: 16 }}>
+      <BackBar title={p.spot} />
+      <div
+        style={{
+          maxWidth: 1100,
+          margin: "14px auto",
+          padding: "0 16px",
+          display: "grid",
+          gap: 16
+        }}
+      >
         {/* Large image with watermark */}
-        <div style={{ position: "relative", borderRadius: 12, overflow: "hidden", border: "1px solid rgba(0,0,0,.08)" }}>
+        <div
+          style={{
+            position: "relative",
+            borderRadius: 12,
+            overflow: "hidden",
+            border: "1px solid rgba(0,0,0,.08)"
+          }}
+        >
           <div style={{ position: "relative", aspectRatio: "4/3", background: "#f4f5f7" }}>
             <img
-              src={photo.url}
-              alt={photo.spot}
-              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", filter: "grayscale(5%)" }}
+              src={p.url}
+              alt={p.spot}
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                filter: "grayscale(5%)"
+              }}
             />
             {/* Watermark overlay */}
             <div style={wmOverlay}>SurfSpotter</div>
@@ -87,16 +111,16 @@ export default function PhotoDetail() {
         {/* Info + buy */}
         <div style={{ display: "grid", gap: 10 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-            <h2 style={{ margin: 0 }}>{photo.spot}</h2>
-            <div title="Likes">❤️ {photo.likes}</div>
+            <h2 style={{ margin: 0 }}>{p.spot}</h2>
+            <div title="Likes">❤️ {p.likes}</div>
           </div>
           <div style={{ opacity: 0.8, fontSize: 14 }}>
-            Uploaded {new Date(photo.createdAt).toLocaleDateString()} • ID {photo.id}
+            Uploaded {new Date(p.createdAt).toLocaleDateString()} • ID {p.id}
           </div>
 
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 8 }}>
             <button onClick={checkoutSingle} style={btnPrimary}>
-              Buy Photo — €{(photo.priceCents / 100).toFixed(2)}
+              Buy Photo — €{(p.priceCents / 100).toFixed(2)}
             </button>
             {stackCount > 1 && (
               <button onClick={checkoutStack} style={btn}>
@@ -123,7 +147,6 @@ const btn: React.CSSProperties = {
 };
 const btnPrimary: React.CSSProperties = { ...btn, background: "#111", color: "#fff", borderColor: "#111" };
 
-// Big diagonal watermark overlay
 const wmOverlay: React.CSSProperties = {
   position: "absolute",
   inset: 0,

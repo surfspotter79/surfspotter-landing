@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Debug Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body { font: 16px/1.4 system-ui, sans-serif; padding: 24px; }
+      .error { background: #fee; border: 1px solid #f88; padding: 12px; border-radius: 8px; white-space: pre-wrap; }
+    </style>
+  </head>
+  <body>
+    <h1>It works 🎉</h1>
+    <p>If your app shows a white page, open DevTools → Console or read errors below.</p>
+    <div id="errors"></div>
+    <script>
+      (function () {
+        const el = document.getElementById('errors');
+        function show(type, msg, src, line, col) {
+          const div = document.createElement('div');
+          div.className = 'error';
+          div.textContent = [type, msg, src && ('@ '+src+':'+line+':'+col)].filter(Boolean).join('\n');
+          el.appendChild(div);
+        }
+        window.addEventListener('error', e => { show('Error', e.message, e.filename, e.lineno, e.colno); });
+        window.addEventListener('unhandledrejection', e => { show('Unhandled Promise rejection', String(e.reason)); });
+      })();
+    </script>
+  </body>
+</html>
