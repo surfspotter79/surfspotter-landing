@@ -1,13 +1,16 @@
+// src/pages/PhotoDetail.tsx
 import { useMemo } from "react";
 import { useParams } from "react-router-dom";
 import BackBar from "../components/BackBar";
+import SmartImage from "../components/SmartImage";
 import { getPhoto, getStackFor } from "../data/seed";
 
 export default function PhotoDetail() {
   const { id = "" } = useParams();
-  const photoMaybe = getPhoto(id);
+  const photo = getPhoto(id);
+  const stack = useMemo(() => (photo ? getStackFor(photo) : []), [photo]);
 
-  if (!photoMaybe) {
+  if (!photo) {
     return (
       <div>
         <BackBar title="Photo" />
@@ -16,10 +19,8 @@ export default function PhotoDetail() {
     );
   }
 
-  const p = photoMaybe; // now definitely a Photo
-  const stack = useMemo(() => getStackFor(p), [p]);
   const stackCount = stack.length;
-  const stackSubtotal = stack.reduce((sum, ph) => sum + ph.priceCents, 0);
+  const stackSubtotal = stack.reduce((sum, p) => sum + p.priceCents, 0);
   const stackTotal = Math.round(stackSubtotal * 0.8); // 20% bundle discount
 
   async function checkoutSingle() {
@@ -29,16 +30,16 @@ export default function PhotoDetail() {
       body: JSON.stringify({
         currency: "eur",
         successUrl: `${location.origin}/live#/thankyou`,
-        cancelUrl: `${location.origin}/live#/photo/${p.id}`,
+        cancelUrl: `${location.origin}/live#/photo/${photo.id}`,
         items: [
           {
-            name: `${p.spot} – Photo`,
-            amount: p.priceCents,
+            name: `${photo.spot} – Photo`,
+            amount: photo.priceCents,
             quantity: 1,
-            metadata: { photoId: p.id }
-          }
-        ]
-      })
+            metadata: { photoId: photo.id },
+          },
+        ],
+      }),
     });
     const json = await res.json();
     if (json?.url) location.href = json.url;
@@ -51,16 +52,16 @@ export default function PhotoDetail() {
       body: JSON.stringify({
         currency: "eur",
         successUrl: `${location.origin}/live#/thankyou`,
-        cancelUrl: `${location.origin}/live#/photo/${p.id}`,
+        cancelUrl: `${location.origin}/live#/photo/${photo.id}`,
         items: [
           {
-            name: `${p.spot} – Stack (${stackCount} photos)`,
+            name: `${photo.spot} – Stack (${stackCount} photos)`,
             amount: stackTotal,
             quantity: 1,
-            metadata: { stackSpot: p.spot, userId: p.userId }
-          }
-        ]
-      })
+            metadata: { stackSpot: photo.spot, userId: photo.userId },
+          },
+        ],
+      }),
     });
     const json = await res.json();
     if (json?.url) location.href = json.url;
@@ -68,33 +69,69 @@ export default function PhotoDetail() {
 
   return (
     <div>
-      <BackBar title={p.spot} />
-      <div style={{ maxWidth: 1100, margin: "14px auto", padding: "0 16px", display: "grid", gap: 16 }}>
-        {/* Image with watermark */}
-        <div style={{ position: "relative", borderRadius: 12, overflow: "hidden", border: "1px solid rgba(0,0,0,.08)" }}>
-          <div style={{ position: "relative", aspectRatio: "4/3", background: "#f4f5f7" }}>
-            <img
-              src={p.url}
-              alt={p.spot}
-              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", filter: "grayscale(5%)" }}
+      <BackBar title={photo.spot} />
+      <div
+        style={{
+          maxWidth: 1100,
+          margin: "14px auto",
+          padding: "0 16px",
+          display: "grid",
+          gap: 16,
+        }}
+      >
+        {/* Large image with watermark */}
+        <div
+          style={{
+            position: "relative",
+            borderRadius: 12,
+            overflow: "hidden",
+            border: "1px solid rgba(0,0,0,.08)",
+          }}
+        >
+          <div
+            style={{
+              position: "relative",
+              aspectRatio: "4/3",
+              background: "#f4f5f7",
+            }}
+          >
+            <SmartImage
+              src={photo.url}
+              alt={photo.spot}
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                filter: "grayscale(5%)",
+              }}
             />
+            {/* Watermark overlay */}
             <div style={wmOverlay}>SurfSpotter</div>
           </div>
         </div>
 
         {/* Info + buy */}
         <div style={{ display: "grid", gap: 10 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-            <h2 style={{ margin: 0 }}>{p.spot}</h2>
-            <div title="Likes">❤️ {p.likes}</div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "baseline",
+            }}
+          >
+            <h2 style={{ margin: 0 }}>{photo.spot}</h2>
+            <div title="Likes">❤️ {photo.likes}</div>
           </div>
           <div style={{ opacity: 0.8, fontSize: 14 }}>
-            Uploaded {new Date(p.createdAt).toLocaleDateString()} • ID {p.id}
+            Uploaded {new Date(photo.createdAt).toLocaleDateString()} • ID{" "}
+            {photo.id}
           </div>
 
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 8 }}>
             <button onClick={checkoutSingle} style={btnPrimary}>
-              Buy Photo — €{(p.priceCents / 100).toFixed(2)}
+              Buy Photo — €{(photo.priceCents / 100).toFixed(2)}
             </button>
             {stackCount > 1 && (
               <button onClick={checkoutStack} style={btn}>
@@ -103,7 +140,8 @@ export default function PhotoDetail() {
             )}
           </div>
           <div style={{ fontSize: 12, opacity: 0.7 }}>
-            Watermark will be removed from the high-resolution download after payment.
+            Watermark will be removed from the high-resolution download after
+            payment.
           </div>
         </div>
       </div>
@@ -117,10 +155,16 @@ const btn: React.CSSProperties = {
   border: "1px solid rgba(0,0,0,.12)",
   background: "#fff",
   cursor: "pointer",
-  fontWeight: 600
+  fontWeight: 600,
 };
-const btnPrimary: React.CSSProperties = { ...btn, background: "#111", color: "#fff", borderColor: "#111" };
+const btnPrimary: React.CSSProperties = {
+  ...btn,
+  background: "#111",
+  color: "#fff",
+  borderColor: "#111",
+};
 
+// Big diagonal watermark overlay
 const wmOverlay: React.CSSProperties = {
   position: "absolute",
   inset: 0,
@@ -134,5 +178,5 @@ const wmOverlay: React.CSSProperties = {
   transform: "rotate(-18deg)",
   userSelect: "none",
   pointerEvents: "none",
-  mixBlendMode: "overlay"
+  mixBlendMode: "overlay",
 };

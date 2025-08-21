@@ -13,19 +13,47 @@ type Photo = {
   views?: number;
 };
 
+const slugify = (s: string) =>
+  (s || "")
+    .toLowerCase()
+    .replace(/[_\s]+/g, "-")
+    .replace(/[^a-z0-9-]/g, "")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+
 const creatorKey = (p: Photo) => p.userId || p.author || "unknown";
 
 export default function CreatorPortfolio() {
   const params = useParams();
-  const id = decodeURIComponent(params.id || "");
+  const idParam = params.id || "";               // from /creator/:id
+  const idCanon = slugify(idParam);              // normalize
+
   const photos = (getPhotos?.() ?? []) as Photo[];
 
-  const mine = useMemo(
-    () => photos.filter((p) => creatorKey(p) === id),
-    [photos, id]
-  );
+  // Accept several possibilities:
+  // - exact userId
+  // - userId with hyphen/underscore normalized
+  // - author's name slug
+  const mine = useMemo(() => {
+    return photos.filter((p) => {
+      const a = slugify(creatorKey(p));
+      const b = slugify(p.userId || "");
+      return a === idCanon || b === idCanon;
+    });
+  }, [photos, idCanon]);
 
-  const label = mine[0]?.author || `User ${id}`;
+  if (mine.length === 0) {
+    return (
+      <div>
+        <BackBar title="Portfolio" />
+        <div style={{ padding: 16 }}>
+          No photos found for this creator.
+        </div>
+      </div>
+    );
+  }
+
+  const label = mine[0]?.author || mine[0]?.userId || "Creator";
   const totals = mine.reduce(
     (acc, p) => {
       acc.likes += Number(p.likes ?? 0);
@@ -34,15 +62,6 @@ export default function CreatorPortfolio() {
     },
     { likes: 0, views: 0 }
   );
-
-  if (mine.length === 0) {
-    return (
-      <div>
-        <BackBar title="Portfolio" />
-        <div style={{ padding: 16 }}>No photos found for this creator.</div>
-      </div>
-    );
-  }
 
   return (
     <div>
@@ -101,7 +120,6 @@ const avatar: React.CSSProperties = {
   placeItems: "center",
   fontWeight: 700,
 };
-
 const grid: React.CSSProperties = {
   display: "grid",
   gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",

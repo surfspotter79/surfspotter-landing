@@ -1,165 +1,126 @@
 // src/data/seed.ts
-// Minimal demo data + helpers used by Explore and PhotoDetail.
+// Central demo data + helpers. Ensures every photo.url is a valid absolute URL.
 
 export type Photo = {
   id: string;
-  userId: string;
+  url: string;           // can be a full URL or an Unsplash id like "photo-123..."
   spot: string;
-  url: string;        // large image
-  thumbUrl?: string;  // optional smaller thumbnail
-  priceCents: number;
+  userId: string;        // creator key used by /creator/:id
+  author: string;        // display name
   likes: number;
-  createdAt: string;  // ISO date
+  views: number;
+  priceCents: number;
+  createdAt: string;     // ISO date
 };
 
-// A small surf set (remote images from Unsplash)
-// Tip: you can replace any url/thumbUrl with your own later.
-const photos: Photo[] = [
+// Turn "photo-xxxxx" or "/photo-xxxxx" into a full Unsplash URL.
+// If it's already an http(s) URL, return as-is.
+function toAbsoluteUrl(u: string, w = 1600): string {
+  if (!u) return "";
+  if (/^https?:\/\//i.test(u)) return u;
+  const id = u.replace(/^\/+/, "");
+  if (/^photo-[a-z0-9-]+$/i.test(id)) {
+    return `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=80`;
+  }
+  // leave any other relative paths alone (e.g. /hero/... you actually have in public/)
+  return u;
+}
+
+// --- Demo photos -------------------------------------------------------------
+// TIP: If you add more, you can still write url: "photo-xxxxx" and it will work.
+const PHOTOS_RAW: Photo[] = [
+  // pro_photog-3 (Kai)
   {
-    id: "pipe-01",
-    userId: "pro-photog-1",
-    spot: "Pipeline, Hawaii",
-    url: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1600&q=60",
-    thumbUrl:
-      "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=600&q=60",
-    priceCents: 1199,
-    likes: 324,
-    createdAt: "2024-12-27T10:00:00.000Z",
+    id: "p1",
+    url: "photo-1500375592092-39e3c2a43a3f",
+    spot: "Pipeline",
+    userId: "pro_photog-3",
+    author: "Kai Nakamura",
+    likes: 321,
+    views: 12430,
+    priceCents: 900,
+    createdAt: "2024-11-01",
   },
   {
-    id: "teahupoo-01",
-    userId: "pro-photog-2",
-    spot: "Teahupo’o, Tahiti",
-    url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=60",
-    thumbUrl:
-      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=60",
-    priceCents: 1599,
-    likes: 501,
-    createdAt: "2025-01-03T12:00:00.000Z",
+    id: "p2",
+    url: "photo-1441829266145-b7a5f54f2445",
+    spot: "Teahupo’o",
+    userId: "pro_photog-3",
+    author: "Kai Nakamura",
+    likes: 280,
+    views: 10980,
+    priceCents: 900,
+    createdAt: "2024-11-05",
+  },
+
+  // pro_photog-1 (Sally)
+  {
+    id: "p3",
+    url: "photo-1507525428034-b723cf961d3e",
+    spot: "Mavericks",
+    userId: "pro_photog-1",
+    author: "Sally Nguyen",
+    likes: 402,
+    views: 15890,
+    priceCents: 1100,
+    createdAt: "2024-10-21",
   },
   {
-    id: "uluwatu-01",
-    userId: "pro-photog-1",
-    spot: "Uluwatu, Bali",
-    url: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1600&q=60",
-    thumbUrl:
-      "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=600&q=60",
-    priceCents: 999,
-    likes: 278,
-    createdAt: "2025-01-10T09:00:00.000Z",
+    id: "p4",
+    url: "photo-1519068737630-e5db30e12e43",
+    spot: "J-Bay",
+    userId: "pro_photog-1",
+    author: "Sally Nguyen",
+    likes: 356,
+    views: 13950,
+    priceCents: 1100,
+    createdAt: "2024-10-28",
+  },
+
+  // pro_photog-2 (Leo)
+  {
+    id: "p5",
+    url: "photo-1502082553048-f009c37129b9",
+    spot: "Uluwatu",
+    userId: "pro_photog-2",
+    author: "Leo Duarte",
+    likes: 297,
+    views: 12044,
+    priceCents: 800,
+    createdAt: "2024-09-14",
   },
   {
-    id: "nazare-01",
-    userId: "pro-photog-3",
-    spot: "Nazaré, Portugal",
-    url: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=60",
-    thumbUrl:
-      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=600&q=60",
-    priceCents: 1899,
-    likes: 742,
-    createdAt: "2025-02-05T15:30:00.000Z",
-  },
-  {
-    id: "jbay-01",
-    userId: "pro-photog-4",
-    spot: "Jeffreys Bay, South Africa",
-    url: "https://images.unsplash.com/photo-1478562853135-c3c9e3ef7905?auto=format&fit=crop&w=1600&q=60",
-    thumbUrl:
-      "https://images.unsplash.com/photo-1478562853135-c3c9e3ef7905?auto=format&fit=crop&w=600&q=60",
-    priceCents: 1299,
-    likes: 403,
-    createdAt: "2025-02-11T08:00:00.000Z",
-  },
-  {
-    id: "hossegor-01",
-    userId: "pro-photog-5",
-    spot: "Hossegor, France",
-    url: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1600&q=60",
-    thumbUrl:
-      "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=600&q=60",
-    priceCents: 899,
-    likes: 255,
-    createdAt: "2025-02-14T14:00:00.000Z",
-  },
-  {
-    id: "snapper-01",
-    userId: "pro-photog-6",
-    spot: "Snapper Rocks, Australia",
-    url: "https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1600&q=60",
-    thumbUrl:
-      "https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=600&q=60",
-    priceCents: 1099,
-    likes: 366,
-    createdAt: "2025-02-16T10:45:00.000Z",
-  },
-  {
-    id: "mavericks-01",
-    userId: "pro-photog-3",
-    spot: "Mavericks, California",
-    url: "https://images.unsplash.com/photo-1493558103817-58b2924bce98?auto=format&fit=crop&w=1600&q=60",
-    thumbUrl:
-      "https://images.unsplash.com/photo-1493558103817-58b2924bce98?auto=format&fit=crop&w=600&q=60",
-    priceCents: 1699,
-    likes: 621,
-    createdAt: "2025-02-18T07:20:00.000Z",
-  },
-  {
-    id: "mentawai-01",
-    userId: "pro-photog-7",
-    spot: "Mentawai, Indonesia",
-    url: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=1600&q=60",
-    thumbUrl:
-      "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=600&q=60",
-    priceCents: 1399,
-    likes: 292,
-    createdAt: "2025-02-20T11:05:00.000Z",
-  },
-  {
-    id: "tamarama-01",
-    userId: "pro-photog-8",
-    spot: "Tamarama, Australia",
-    url: "https://images.unsplash.com/photo-1500375592092-39e3c2a43a3f?auto=format&fit=crop&w=1600&q=60",
-    thumbUrl:
-      "https://images.unsplash.com/photo-1500375592092-39e3c2a43a3f?auto=format&fit=crop&w=600&q=60",
-    priceCents: 999,
-    likes: 211,
-    createdAt: "2025-02-21T13:00:00.000Z",
-  },
-  {
-    id: "raglan-01",
-    userId: "pro-photog-9",
-    spot: "Raglan, New Zealand",
-    url: "https://images.unsplash.com/photo-1441829266145-b7a5f54f2445?auto=format&fit=crop&w=1600&q=60",
-    thumbUrl:
-      "https://images.unsplash.com/photo-1441829266145-b7a5f54f2445?auto=format&fit=crop&w=600&q=60",
-    priceCents: 1099,
-    likes: 188,
-    createdAt: "2025-02-22T09:40:00.000Z",
-  },
-  {
-    id: "ericeira-01",
-    userId: "pro-photog-5",
-    spot: "Ericeira, Portugal",
-    url: "https://images.unsplash.com/photo-1482192596544-9eb780fc7f66?auto=format&fit=crop&w=1600&q=60",
-    thumbUrl:
-      "https://images.unsplash.com/photo-1482192596544-9eb780fc7f66?auto=format&fit=crop&w=600&q=60",
-    priceCents: 899,
-    likes: 174,
-    createdAt: "2025-02-23T16:10:00.000Z",
+    id: "p6",
+    url: "photo-1493558103817-58b2924bce98",
+    spot: "Nazare",
+    userId: "pro_photog-2",
+    author: "Leo Duarte",
+    likes: 265,
+    views: 11230,
+    priceCents: 800,
+    createdAt: "2024-09-20",
   },
 ];
 
-// Public API used by your components:
+// Normalize URLs once.
+const PHOTOS: Photo[] = PHOTOS_RAW.map((p) => ({
+  ...p,
+  url: toAbsoluteUrl(p.url),
+}));
+
+// --- API used by the app -----------------------------------------------------
 
 export function getPhotos(): Photo[] {
-  return photos;
+  return PHOTOS;
 }
 
 export function getPhoto(id: string): Photo | undefined {
-  return photos.find((p) => p.id === id);
+  return PHOTOS.find((p) => p.id === id);
 }
 
-// “Stack” = other photos from the same spot (for the bundle button)
+// “Stack” = other photos by the same creator at the same spot (for the bundle button)
 export function getStackFor(photo: Photo): Photo[] {
-  return photos.filter((p) => p.spot === photo.spot);
+  return PHOTOS.filter(
+    (p) => p.userId === photo.userId && p.spot === photo.spot && p.id !== photo.id
+  );
 }

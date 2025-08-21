@@ -14,10 +14,20 @@ type Photo = {
   createdAt?: string | number | Date;
 };
 
+// simple slugify that normalizes hyphens/underscores and strips symbols
+const slugify = (s: string) =>
+  (s || "")
+    .toLowerCase()
+    .replace(/[_\s]+/g, "-")
+    .replace(/[^a-z0-9-]/g, "")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+
 type Agg = {
-  key: string;        // userId or author (for creators) OR spot (for spots)
-  label: string;      // author name or spot name
-  coverUrl: string;   // one representative photo
+  keySlug: string;     // URL param we link to
+  keyRaw: string;      // original id/author
+  label: string;       // what we show on the card
+  coverUrl: string;
   totalLikes: number;
   totalViews: number;
   photoCount: number;
@@ -31,21 +41,21 @@ export default function Explore() {
   const [sortBy, setSortBy] = useState<"likes" | "views">("likes");
   const isSpotMode = cat === "spots";
 
-  const filtered = photos;
-
   const aggregates = useMemo<Agg[]>(() => {
     const map = new Map<string, Agg>();
 
-    for (const p of filtered) {
-      const key = isSpotMode ? p.spot : (p.userId || p.author || "unknown");
-      const label = isSpotMode ? p.spot : (p.author || `User ${key}`);
+    for (const p of photos) {
+      const baseKey = isSpotMode ? p.spot : (p.userId || p.author || "unknown");
+      const keySlug = slugify(baseKey);
+      const label = isSpotMode ? p.spot : (p.author || baseKey);
       const likes = Number(p.likes ?? 0);
       const views = Number(p.views ?? 0);
 
-      const prev = map.get(key);
+      const prev = map.get(keySlug);
       if (!prev) {
-        map.set(key, {
-          key,
+        map.set(keySlug, {
+          keySlug,
+          keyRaw: baseKey,
           label,
           coverUrl: p.url,
           totalLikes: likes,
@@ -69,7 +79,7 @@ export default function Explore() {
       return b.photoCount - a.photoCount;
     });
     return list;
-  }, [filtered, isSpotMode, sortBy]);
+  }, [photos, cat, sortBy, isSpotMode]);
 
   return (
     <div>
@@ -121,13 +131,13 @@ export default function Explore() {
                 </div>
               );
 
-              // Only creators are linkable (not spots)
+              // Only creators get links; spots remain static for now.
               return isSpotMode ? (
-                <div key={a.key}>{CardInner}</div>
+                <div key={a.keySlug}>{CardInner}</div>
               ) : (
                 <Link
-                  key={a.key}
-                  to={`/creator/${encodeURIComponent(a.key)}`}
+                  key={a.keySlug}
+                  to={`/creator/${a.keySlug}`}
                   style={{ textDecoration: "none", color: "inherit" }}
                 >
                   {CardInner}
